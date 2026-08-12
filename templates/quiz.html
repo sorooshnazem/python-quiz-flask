@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}
+Quiz
+{% endblock %}
+
+{% block content %}
+
+<h1>Python Quiz</h1>
+
+<h3>Current Score: {{ score }}</h3>
+
+{% if message %}
+    <p>{{ message }}</p>
+{% endif %}
+
+<h2>{{ question[1] }}</h2>
+
+<form method="POST">
+
+    <input
+        type="hidden"
+        name="question_id"
+        value="{{ question[0] }}"
+    >
+
+    <input type="radio" name="answer" value="{{ question[2] }}" required>
+    {{ question[2] }}
+
+    <br><br>
+
+    <input type="radio" name="answer" value="{{ question[3] }}" required>
+    {{ question[3] }}
+
+    <br><br>
+
+    <input type="radio" name="answer" value="{{ question[4] }}" required>
+    {{ question[4] }}
+
+    <br><br>
+
+    <input type="radio" name="answer" value="{{ question[5] }}" required>
+    {{ question[5] }}
+
+    <br><br>
+
+    <button type="submit">Submit Answer</button>
+
+</form>
+
+{% endblock %}

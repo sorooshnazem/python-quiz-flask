@@ -1,0 +1,19 @@
+[project]
+name = "python_quiz_project"
+version = "0.1.0"
+description = "A simple Python CLI quiz application."
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = []
+
+[project.scripts]
+quiz = "quiz_app.quiz:main"
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"

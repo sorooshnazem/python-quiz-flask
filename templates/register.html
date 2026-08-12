@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}
+Register
+{% endblock %}
+
+{% block content %}
+
+<h1>Register</h1>
+
+{% if message %}
+    <p>{{ message }}</p>
+{% endif %}
+
+<form method="POST">
+
+    <label>Username:</label>
+    <input type="text" name="username">
+
+    <br><br>
+
+    <label>Password:</label>
+    <input type="password" name="password">
+
+    <br><br>
+
+    <label>Confirm Password:</label>
+    <input type="password" name="confirm_password">
+
+    <br><br>
+
+    <label>Nickname:</label>
+    <input type="text" name="nickname">
+
+    <br><br>
+
+    <button type="submit">Register</button>
+
+</form>
+
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}
+Home
+{% endblock %}
+
+{% block content %}
+
+<h1>Python Quiz</h1>
+
+{% if username %}
+    <p>Welcome {{ username }}</p>
+{% endif %}
+
+<h2>Weather</h2>
+
+<form method="POST">
+
+    <label>City:</label>
+
+    <input
+        type="text"
+        name="city"
+        placeholder="Enter a city"
+    >
+
+    <button type="submit">
+        Search Weather
+    </button>
+
+</form>
+
+{% if weather_data %}
+
+    <h2 class="mt-4">3-Day Forecast</h2>
+
+    <div class="row">
+
+        {% for i in range(3) %}
+
+            <div class="col-md-4">
+
+                <div class="card mt-3">
+
+                    <div class="card-body">
+
+                        <h4 class="card-title">
+                            {{ weather_data["weekdays"][i] }}
+                        </h4>
+
+                        <p>
+                            {{ weather_data["daily"]["time"][i] }}
+                        </p>
+
+                        <h5>
+                            {{ weather_data["daily"]["temperature_2m_max"][i] }} °C
+                            /
+                            {{ weather_data["daily"]["temperature_2m_min"][i] }} °C
+                        </h5>
+
+                        <p>
+                            {{ weather_data["descriptions"][i] }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+{% endif %}
+
+<p>Welcome to the Python Quiz website!</p>
+
+{% endblock %}
