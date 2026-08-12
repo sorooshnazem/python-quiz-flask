@@ -172,7 +172,7 @@ Per ogni giorno vengono mostrati:
 Clonare il repository:
 
 ```bash
-git clone <URL_DEL_REPOSITORY>
+git clone https://github.com/sorooshnazem/python-quiz-flask.git
 ```
 
 Entrare nella cartella:
