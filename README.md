@@ -1,8 +1,10 @@
-# Python Quiz Web Application
+# Python Quiz Platform
 
-Applicazione web sviluppata con **Flask** che permette agli utenti di registrarsi, effettuare il login, partecipare a un quiz, accumulare punti e confrontare il proprio risultato con quello degli altri utenti.
+Applicazione web sviluppata con **Flask** dedicata all'apprendimento e alla verifica delle conoscenze di Python.
 
-L'applicazione include inoltre una sezione meteo che consente di cercare una città e visualizzare le previsioni per i tre giorni successivi tramite API esterna.
+Gli utenti possono registrarsi, effettuare il login, rispondere a quiz casuali, accumulare punti e confrontare il proprio risultato con quello degli altri utenti.
+
+L'applicazione include inoltre un'area amministrativa protetta per la gestione delle domande del quiz.
 
 ## Demo online
 
@@ -12,29 +14,29 @@ L'applicazione è disponibile online su PythonAnywhere:
 
 ## Video demo
 
-È disponibile un breve video dimostrativo che mostra la navigazione tra le principali funzionalità dell'applicazione:
+È disponibile un breve video dimostrativo:
 
 [Guarda il video demo](docs/demo.mp4)
 
 ## Funzionalità principali
 
-* Registrazione di nuovi utenti
-* Controllo dell'unicità di username e nickname
-* Verifica della conferma password
-* Password salvate tramite hashing
+* Registrazione utenti
 * Login e logout
-* Gestione della sessione utente
-* Accesso protetto alla pagina del quiz
-* Domande estratte casualmente dal database
-* Quattro possibili risposte per ogni domanda
+* Gestione delle sessioni
+* Password memorizzate tramite hashing
+* Quiz con domande casuali
+* Quattro opzioni per ogni domanda
 * Verifica automatica della risposta
-* Incremento del punteggio di 10 punti per ogni risposta corretta
+* Incremento del punteggio per ogni risposta corretta
 * Salvataggio del punteggio nel database
-* Classifica degli utenti ordinata per punteggio
-* Ricerca meteo tramite città
-* Previsioni meteo per tre giorni
+* Classifica utenti
+* Ruolo amministratore
+* Area Admin protetta
+* Aggiunta di nuove domande
+* Modifica di domande e opzioni
+* Eliminazione delle domande
+* Selezione della risposta corretta tramite dropdown
 * Interfaccia realizzata con Bootstrap
-* Deploy dell'applicazione su PythonAnywhere
 
 ## Tecnologie utilizzate
 
@@ -44,18 +46,13 @@ L'applicazione è disponibile online su PythonAnywhere:
 * Flask
 * SQLite
 * Werkzeug
-* Python Dotenv
+* python-dotenv
 
 ### Frontend
 
 * HTML
 * Jinja2
 * Bootstrap
-
-### API
-
-* Open-Meteo Geocoding API
-* Open-Meteo Forecast API
 
 ### Deployment
 
@@ -64,10 +61,11 @@ L'applicazione è disponibile online su PythonAnywhere:
 ## Struttura del progetto
 
 ```text
-python_quiz_project/
+python-quiz-flask/
 │
 ├── app.py
 ├── requirements.txt
+├── pyproject.toml
 ├── README.md
 ├── .gitignore
 │
@@ -77,9 +75,9 @@ python_quiz_project/
 │   ├── login.html
 │   ├── register.html
 │   ├── quiz.html
-│   └── ranking.html
-│
-├── static/
+│   ├── ranking.html
+│   ├── admin.html
+│   └── edit_question.html
 │
 └── docs/
     └── demo.mp4
@@ -87,9 +85,9 @@ python_quiz_project/
 
 ## Database
 
-L'applicazione utilizza un database SQLite.
+L'applicazione utilizza SQLite.
 
-La tabella `users` contiene le informazioni principali degli utenti:
+### Tabella `users`
 
 ```text
 users
@@ -97,10 +95,18 @@ users
 ├── username
 ├── password
 ├── nickname
-└── score
+├── score
+└── role
 ```
 
-La tabella `questions` contiene le domande del quiz:
+Il campo `role` permette di distinguere tra:
+
+```text
+user
+admin
+```
+
+### Tabella `questions`
 
 ```text
 questions
@@ -113,20 +119,16 @@ questions
 └── correct_answer
 ```
 
-Il database viene inizializzato automaticamente dall'applicazione se non è già presente.
-
 ## Quiz
 
-Quando un utente autenticato accede alla pagina del quiz, viene estratta casualmente una domanda dal database.
-
-Il flusso principale è:
+Quando un utente autenticato accede al quiz, viene estratta casualmente una domanda dal database.
 
 ```text
 Utente autenticato
         ↓
 Domanda casuale
         ↓
-Selezione della risposta
+Selezione risposta
         ↓
 Verifica nel database
         ↓
@@ -139,33 +141,32 @@ Risposta corretta?
 Aggiornamento punteggio
 ```
 
-La risposta corretta non viene inviata direttamente al browser. Il frontend invia l'identificativo della domanda e il backend recupera dal database la risposta corretta.
+La risposta corretta viene verificata dal backend utilizzando l'identificativo della domanda.
 
-## Meteo
+## Area Admin
 
-L'utente può inserire il nome di una città nella Home Page.
-
-Il processo è composto da due chiamate API:
+L'area amministrativa è accessibile esclusivamente agli utenti con:
 
 ```text
-Nome città
-    ↓
-Open-Meteo Geocoding API
-    ↓
-Latitudine + Longitudine
-    ↓
-Open-Meteo Forecast API
-    ↓
-Previsioni per 3 giorni
+role = admin
 ```
 
-Per ogni giorno vengono mostrati:
+L'amministratore può:
 
-* giorno della settimana
-* data
-* temperatura massima
-* temperatura minima
-* condizioni meteorologiche
+* visualizzare le domande presenti
+* aggiungere nuove domande
+* modificare domanda e opzioni
+* scegliere la risposta corretta
+* eliminare domande
+
+Questa sezione implementa quindi le principali operazioni CRUD:
+
+```text
+Create
+Read
+Update
+Delete
+```
 
 ## Installazione locale
 
@@ -178,7 +179,7 @@ git clone https://github.com/sorooshnazem/python-quiz-flask.git
 Entrare nella cartella:
 
 ```bash
-cd python_quiz_project
+cd python-quiz-flask
 ```
 
 Creare un ambiente virtuale:
@@ -217,7 +218,7 @@ Avviare l'applicazione:
 python app.py
 ```
 
-Aprire quindi:
+Aprire:
 
 ```text
 http://127.0.0.1:5000
@@ -225,11 +226,28 @@ http://127.0.0.1:5000
 
 ## Sicurezza
 
-Le password degli utenti non vengono salvate in chiaro nel database.
+Le password degli utenti non vengono salvate in chiaro.
 
-L'applicazione utilizza le funzioni di hashing di Werkzeug per memorizzare e verificare le password.
+Werkzeug viene utilizzato per hashing e verifica delle password.
 
 La `SECRET_KEY` di Flask viene caricata tramite variabile d'ambiente e il file `.env` non viene incluso nel repository Git.
+
+Le route amministrative verificano inoltre che l'utente autenticato abbia ruolo `admin`.
+
+## Evoluzione futura
+
+Il progetto è pensato per essere esteso gradualmente.
+
+Possibili sviluppi futuri:
+
+* organizzazione dei quiz per argomento
+* livelli di difficoltà
+* lezioni Python
+* monitoraggio dei progressi
+* quiz associati alle lezioni
+* nuovi corsi dedicati a Git e Bash
+
+Queste funzionalità non sono ancora implementate e rappresentano possibili evoluzioni future della piattaforma.
 
 ## Autore
 
