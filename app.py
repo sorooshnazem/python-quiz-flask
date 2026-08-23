@@ -1,8 +1,6 @@
 from flask import Flask, render_template, request, session, redirect
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
-import requests
-from datetime import datetime
 import os
 from dotenv import load_dotenv
 
@@ -10,32 +8,6 @@ load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
-
-def weather_description(code):
-
-    if code == 0:
-        return "Clear sky"
-
-    elif code in [1, 2, 3]:
-        return "Cloudy"
-
-    elif code in [45, 48]:
-        return "Fog"
-
-    elif code in [51, 53, 55, 61, 63, 65]:
-        return "Rain"
-
-    elif code in [71, 73, 75]:
-        return "Snow"
-
-    elif code in [80, 81, 82]:
-        return "Rain showers"
-
-    elif code in [95, 96, 99]:
-        return "Thunderstorm"
-
-    else:
-        return "Unknown"
 
 def init_db():
 
@@ -49,7 +21,8 @@ def init_db():
             username TEXT UNIQUE NOT NULL,
             password TEXT NOT NULL,
             nickname TEXT UNIQUE NOT NULL,
-            score INTEGER DEFAULT 0
+            score INTEGER DEFAULT 0,
+            role TEXT NOT NULL DEFAULT 'user'
         )
     """)
 
@@ -115,77 +88,14 @@ def init_db():
     connection.commit()
     connection.close()
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/")
 def home():
 
     username = session.get("username")
 
-    weather_data = None
-
-    if request.method == "POST":
-
-        city = request.form.get("city")
-
-        geocoding_url = "https://geocoding-api.open-meteo.com/v1/search"
-
-        geocoding_params = {
-            "name": city,
-            "count": 1
-        }
-
-        geocoding_response = requests.get(
-            geocoding_url,
-            params=geocoding_params
-        )
-
-        geocoding_data = geocoding_response.json()
-
-        if "results" in geocoding_data:
-
-            location = geocoding_data["results"][0]
-
-            latitude = location["latitude"]
-            longitude = location["longitude"]
-
-            forecast_url = "https://api.open-meteo.com/v1/forecast"
-
-            forecast_params = {
-                "latitude": latitude,
-                "longitude": longitude,
-                "daily": "temperature_2m_max,temperature_2m_min,weather_code",
-                "forecast_days": 3,
-                "timezone": "auto"
-            }
-
-            forecast_response = requests.get(
-                forecast_url,
-                params=forecast_params
-            )
-
-            weather_data = forecast_response.json()
-
-            for date in weather_data["daily"]["time"]:
-                weekday = datetime.strptime(date, "%Y-%m-%d").strftime("%A")
-
-                if "weekdays" not in weather_data:
-                    weather_data["weekdays"] = []
-
-                weather_data["weekdays"].append(weekday)
-            
-            weather_data["descriptions"] = []
-
-            for code in weather_data["daily"]["weather_code"]:
-
-                description = weather_description(code)
-
-                weather_data["descriptions"].append(description)
-
-            print(weather_data)
-
     return render_template(
         "home.html",
-        username=username,
-        weather_data=weather_data
+        username=username
     )
 
 @app.route("/login", methods=["GET", "POST"])
@@ -220,6 +130,9 @@ def login():
                 session["user_id"] = user[0]
                 session["username"] = user[1]
                 session["nickname"] = user[3]
+                session["role"] = user[5]
+
+                print("SESSION AFTER LOGIN:", dict(session))
 
                 message = "Login successful"
             else:
@@ -375,6 +288,195 @@ def ranking():
     return render_template(
         "ranking.html",
         users=users
+    )
+
+
+@app.route("/admin", methods=["GET", "POST"])
+def admin():
+
+    if "user_id" not in session:
+        return redirect("/login")
+
+    if session.get("role") != "admin":
+        return "Access denied", 403
+
+    message = ""
+
+    if request.method == "POST":
+
+        question = request.form.get("question")
+        option1 = request.form.get("option1")
+        option2 = request.form.get("option2")
+        option3 = request.form.get("option3")
+        option4 = request.form.get("option4")
+        correct_option = request.form.get("correct_answer")
+
+        options = {
+            "1": option1,
+            "2": option2,
+            "3": option3,
+            "4": option4
+        }
+
+        correct_answer = options.get(correct_option)
+
+        connection = sqlite3.connect("database.db")
+        cursor = connection.cursor()
+
+        cursor.execute("""
+            INSERT INTO questions
+            (
+                question,
+                option1,
+                option2,
+                option3,
+                option4,
+                correct_answer
+            )
+            VALUES (?, ?, ?, ?, ?, ?)
+        """, (
+            question,
+            option1,
+            option2,
+            option3,
+            option4,
+            correct_answer
+        ))
+
+        connection.commit()
+        connection.close()
+
+        message = "Domanda aggiunta con successo!"
+
+    connection = sqlite3.connect("database.db")
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        SELECT
+            id,
+            question,
+            option1,
+            option2,
+            option3,
+            option4,
+            correct_answer
+        FROM questions
+        ORDER BY id DESC
+    """)
+
+    questions = cursor.fetchall()
+
+    connection.close()
+
+    return render_template(
+        "admin.html",
+        message=message,
+        questions=questions
+    )
+
+@app.route("/admin/delete/<int:question_id>", methods=["POST"])
+def delete_question(question_id):
+
+    if "user_id" not in session:
+        return redirect("/login")
+
+    if session.get("role") != "admin":
+        return "Access denied", 403
+
+    connection = sqlite3.connect("database.db")
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        DELETE FROM questions
+        WHERE id = ?
+    """, (question_id,))
+
+    connection.commit()
+    connection.close()
+
+    return redirect("/admin")
+
+@app.route(
+    "/admin/edit/<int:question_id>",
+    methods=["GET", "POST"]
+)
+def edit_question(question_id):
+
+    if "user_id" not in session:
+        return redirect("/login")
+
+    if session.get("role") != "admin":
+        return "Access denied", 403
+
+    connection = sqlite3.connect("database.db")
+    cursor = connection.cursor()
+
+    if request.method == "POST":
+
+        question_text = request.form.get("question")
+        option1 = request.form.get("option1")
+        option2 = request.form.get("option2")
+        option3 = request.form.get("option3")
+        option4 = request.form.get("option4")
+        correct_option = request.form.get("correct_answer")
+
+        options = {
+            "1": option1,
+            "2": option2,
+            "3": option3,
+            "4": option4
+        }
+
+        correct_answer = options.get(correct_option)
+
+        cursor.execute("""
+            UPDATE questions
+            SET
+                question = ?,
+                option1 = ?,
+                option2 = ?,
+                option3 = ?,
+                option4 = ?,
+                correct_answer = ?
+            WHERE id = ?
+        """, (
+            question_text,
+            option1,
+            option2,
+            option3,
+            option4,
+            correct_answer,
+            question_id
+        ))
+
+        connection.commit()
+        connection.close()
+
+        return redirect("/admin")
+
+    cursor.execute("""
+        SELECT
+            id,
+            question,
+            option1,
+            option2,
+            option3,
+            option4,
+            correct_answer
+        FROM questions
+        WHERE id = ?
+    """, (question_id,))
+
+    question = cursor.fetchone()
+
+    connection.close()
+
+    if question is None:
+        return "Question not found", 404
+
+    return render_template(
+        "edit_question.html",
+        question=question
     )
 
 if __name__ == "__main__":

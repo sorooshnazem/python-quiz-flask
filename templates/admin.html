@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block title %}
+Admin
+{% endblock %}
+
+{% block content %}
+
+<h1>Admin Panel</h1>
+
+<h3 class="mt-4">Aggiungi una nuova domanda</h3>
+
+{% if message %}
+    <div class="alert alert-success">
+        {{ message }}
+    </div>
+{% endif %}
+
+<form method="POST">
+
+    <div class="mb-3">
+        <label class="form-label">Domanda</label>
+        <input
+            type="text"
+            class="form-control"
+            name="question"
+            required
+        >
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Opzione 1</label>
+        <input
+            type="text"
+            class="form-control"
+            name="option1"
+            required
+        >
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Opzione 2</label>
+        <input
+            type="text"
+            class="form-control"
+            name="option2"
+            required
+        >
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Opzione 3</label>
+        <input
+            type="text"
+            class="form-control"
+            name="option3"
+            required
+        >
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Opzione 4</label>
+        <input
+            type="text"
+            class="form-control"
+            name="option4"
+            required
+        >
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Risposta corretta</label>
+
+        <select
+            class="form-select"
+            name="correct_answer"
+            required
+        >
+            <option value="">Seleziona la risposta corretta</option>
+            <option value="1">Opzione 1</option>
+            <option value="2">Opzione 2</option>
+            <option value="3">Opzione 3</option>
+            <option value="4">Opzione 4</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        Aggiungi domanda
+    </button>
+
+</form>
+
+<hr class="my-5">
+
+<h3>Domande presenti</h3>
+
+<table class="table table-bordered table-striped mt-3">
+
+    <thead>
+        <tr>
+            <th>Domanda</th>
+            <th>Opzione 1</th>
+            <th>Opzione 2</th>
+            <th>Opzione 3</th>
+            <th>Opzione 4</th>
+            <th>Risposta corretta</th>
+            <th>Azioni</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for q in questions %}
+
+            <tr>
+                <td>{{ q[1] }}</td>
+                <td>{{ q[2] }}</td>
+                <td>{{ q[3] }}</td>
+                <td>{{ q[4] }}</td>
+                <td>{{ q[5] }}</td>
+                <td>{{ q[6] }}</td>
+
+                <td>
+                    <a
+                        href="/admin/edit/{{ q[0] }}"
+                        class="btn btn-sm btn-warning"
+                    >
+                        Modifica
+                    </a>
+
+                    <form
+                        method="POST"
+                        action="/admin/delete/{{ q[0] }}"
+                        style="display:inline;"
+                    >
+                        <button
+                            type="submit"
+                            class="btn btn-sm btn-danger"
+                        >
+                            Elimina
+                        </button>
+                    </form>
+                </td>
+            </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}

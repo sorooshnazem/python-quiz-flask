@@ -6,74 +6,100 @@ Home
 
 {% block content %}
 
-<h1>Python Quiz</h1>
+<div class="text-center mt-5">
 
-{% if username %}
-    <p>Welcome {{ username }}</p>
-{% endif %}
+    <h1 class="display-4">
+        Python Quiz
+    </h1>
 
-<h2>Weather</h2>
+    <p class="lead mt-3">
+        Metti alla prova le tue conoscenze di Python,
+        accumula punti e confronta il tuo risultato
+        con quello degli altri utenti.
+    </p>
 
-<form method="POST">
+    {% if username %}
 
-    <label>City:</label>
+        <h4 class="mt-4">
+            Benvenuto {{ username }}!
+        </h4>
 
-    <input
-        type="text"
-        name="city"
-        placeholder="Enter a city"
-    >
+        <a
+            href="/quiz"
+            class="btn btn-primary btn-lg mt-3"
+        >
+            Inizia il Quiz
+        </a>
 
-    <button type="submit">
-        Search Weather
-    </button>
+        <a
+            href="/ranking"
+            class="btn btn-outline-secondary btn-lg mt-3"
+        >
+            Visualizza la Classifica
+        </a>
 
-</form>
+        {% if session.get("role") == "admin" %}
 
-{% if weather_data %}
+            <a
+                href="/admin"
+                class="btn btn-warning btn-lg mt-3"
+            >
+                Admin Panel
+            </a>
 
-    <h2 class="mt-4">3-Day Forecast</h2>
+        {% endif %}
 
-    <div class="row">
+    {% else %}
 
-        {% for i in range(3) %}
+        <div class="mt-4">
 
-            <div class="col-md-4">
+            <a
+                href="/login"
+                class="btn btn-success btn-lg me-2"
+            >
+                Login
+            </a>
 
-                <div class="card mt-3">
+            <a
+                href="/register"
+                class="btn btn-outline-primary btn-lg"
+            >
+                Registrati
+            </a>
 
-                    <div class="card-body">
+        </div>
 
-                        <h4 class="card-title">
-                            {{ weather_data["weekdays"][i] }}
-                        </h4>
+    {% endif %}
 
-                        <p>
-                            {{ weather_data["daily"]["time"][i] }}
-                        </p>
+</div>
 
-                        <h5>
-                            {{ weather_data["daily"]["temperature_2m_max"][i] }} °C
-                            /
-                            {{ weather_data["daily"]["temperature_2m_min"][i] }} °C
-                        </h5>
+<hr class="my-5">
 
-                        <p>
-                            {{ weather_data["descriptions"][i] }}
-                        </p>
+<div class="row text-center">
 
-                    </div>
-
-                </div>
-
-            </div>
-
-        {% endfor %}
-
+    <div class="col-md-4">
+        <h3>Quiz Python</h3>
+        <p>
+            Rispondi a domande casuali su Python
+            e verifica le tue conoscenze.
+        </p>
     </div>
 
-{% endif %}
+    <div class="col-md-4">
+        <h3>Punteggio</h3>
+        <p>
+            Guadagna 10 punti per ogni risposta corretta.
+        </p>
+    </div>
 
-<p>Welcome to the Python Quiz website!</p>
+    <div class="col-md-4">
+        <h3>Classifica</h3>
+        <p>
+            Confronta il tuo punteggio con quello
+            degli altri utenti.
+        </p>
+    </div>
+
+</div>
 
 {% endblock %}
