@@ -69,6 +69,62 @@ Admin
     </div>
 
     <div class="mb-3">
+
+        <label class="form-label">
+            Topic
+        </label>
+
+        <select
+            class="form-select"
+            name="topic_id"
+            required
+        >
+
+            <option value="">
+                Seleziona un topic
+            </option>
+
+            {% for topic in topics %}
+
+                <option value="{{ topic[0] }}">
+                    {{ topic[1] }}
+                </option>
+
+            {% endfor %}
+
+        </select>
+
+    </div>
+
+    <div class="mb-3">
+
+        <label class="form-label">
+            Difficulty
+        </label>
+
+        <select
+            class="form-select"
+            name="difficulty"
+            required
+        >
+
+            <option value="Beginner" selected>
+                Beginner
+            </option>
+
+            <option value="Intermediate">
+                Intermediate
+            </option>
+
+            <option value="Advanced">
+                Advanced
+            </option>
+
+        </select>
+
+    </div>
+
+    <div class="mb-3">
         <label class="form-label">Risposta corretta</label>
 
         <select
@@ -94,6 +150,82 @@ Admin
 
 <h3>Domande presenti</h3>
 
+<form method="GET" class="mb-4">
+
+    <label class="form-label">
+        Filtra per Topic
+    </label>
+
+    <select
+        name="topic"
+        class="form-select"
+        onchange="this.form.submit()"
+    >
+
+        <option value="">
+            Tutti
+        </option>
+
+        {% for topic in topics %}
+
+            <option
+                value="{{ topic[0] }}"
+                {% if selected_topic == topic[0]|string %}
+                    selected
+                {% endif %}
+            >
+                {{ topic[1] }}
+            </option>
+
+        {% endfor %}
+
+    </select>
+
+    <label class="form-label mt-3">
+        Filtra per Difficulty
+    </label>
+
+    <select
+        name="difficulty"
+        class="form-select"
+    >
+
+        <option value="">
+            Tutte
+        </option>
+
+        <option
+            value="Beginner"
+            {% if selected_difficulty == "Beginner" %}selected{% endif %}
+        >
+            Beginner
+        </option>
+
+        <option
+            value="Intermediate"
+            {% if selected_difficulty == "Intermediate" %}selected{% endif %}
+        >
+            Intermediate
+        </option>
+
+        <option
+            value="Advanced"
+            {% if selected_difficulty == "Advanced" %}selected{% endif %}
+        >
+            Advanced
+        </option>
+
+    </select>
+
+    <button
+        type="submit"
+        class="btn btn-primary mt-3"
+    >
+        Filtra
+    </button>
+
+</form>
+
 <table class="table table-bordered table-striped mt-3">
 
     <thead>
@@ -104,7 +236,10 @@ Admin
             <th>Opzione 3</th>
             <th>Opzione 4</th>
             <th>Risposta corretta</th>
+            <th>Topic</th>
+            <th>Difficulty</th>
             <th>Azioni</th>
+            
         </tr>
     </thead>
 
@@ -119,7 +254,8 @@ Admin
                 <td>{{ q[4] }}</td>
                 <td>{{ q[5] }}</td>
                 <td>{{ q[6] }}</td>
-
+                <td>{{ q[7] }}</td>
+                <td>{{ q[8] }}</td>
                 <td>
                     <a
                         href="/admin/edit/{{ q[0] }}"

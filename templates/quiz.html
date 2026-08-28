@@ -24,6 +24,26 @@ Quiz
         value="{{ question[0] }}"
     >
 
+    {% if selected_topic %}
+
+        <input
+            type="hidden"
+            name="topic"
+            value="{{ selected_topic }}"
+        >
+
+    {% endif %}
+
+    {% if selected_difficulty %}
+
+        <input
+            type="hidden"
+            name="difficulty"
+            value="{{ selected_difficulty }}"
+        >
+
+    {% endif %}
+
     <input type="radio" name="answer" value="{{ question[2] }}" required>
     {{ question[2] }}
 

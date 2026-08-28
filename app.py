@@ -34,9 +34,80 @@ def init_db():
             option2 TEXT NOT NULL,
             option3 TEXT NOT NULL,
             option4 TEXT NOT NULL,
-            correct_answer TEXT NOT NULL
+            correct_answer TEXT NOT NULL,
+            course_id INTEGER,
+            topic_id INTEGER,
+            difficulty TEXT NOT NULL DEFAULT 'Beginner',
+            FOREIGN KEY (course_id) REFERENCES courses(id),
+            FOREIGN KEY (topic_id) REFERENCES topics(id)
         )
     """)
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS courses (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT UNIQUE NOT NULL
+        )
+    """)
+
+    cursor.execute("""
+        INSERT OR IGNORE INTO courses (name)
+        VALUES (?)
+    """, ("Python",))
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS topics (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            course_id INTEGER NOT NULL,
+            FOREIGN KEY (course_id) REFERENCES courses(id)
+        )
+    """)
+
+    cursor.execute("""
+        SELECT id
+        FROM courses
+        WHERE name = ?
+    """, ("Python",))
+
+    python_course = cursor.fetchone()
+
+    if python_course:
+
+        python_course_id = python_course[0]
+
+        topics = [
+            "Basics",
+            "Data Types",
+            "Control Flow",
+            "Functions",
+            "OOP",
+            "Exceptions"
+        ]
+
+        for topic in topics:
+
+            cursor.execute("""
+                SELECT id
+                FROM topics
+                WHERE name = ?
+                AND course_id = ?
+            """, (
+                topic,
+                python_course_id
+            ))
+
+            existing_topic = cursor.fetchone()
+
+            if existing_topic is None:
+
+                cursor.execute("""
+                    INSERT INTO topics (name, course_id)
+                    VALUES (?, ?)
+                """, (
+                    topic,
+                    python_course_id
+                ))
 
     cursor.execute("""
         SELECT COUNT(*) FROM questions
@@ -208,10 +279,31 @@ def quiz():
 
     message = ""
 
+    # -----------------------------------
+    # RECUPERA TOPIC E DIFFICULTY
+    # -----------------------------------
+
+    if request.method == "POST":
+        selected_topic = request.form.get("topic")
+        selected_difficulty = request.form.get("difficulty")
+    else:
+        selected_topic = request.args.get("topic")
+        selected_difficulty = request.args.get("difficulty")
+
+    if selected_topic in ("", "None", None):
+        selected_topic = None
+
+    if selected_difficulty in ("", "None", None):
+        selected_difficulty = None
+
     connection = sqlite3.connect("database.db")
     cursor = connection.cursor()
 
     user_id = session["user_id"]
+
+    # -----------------------------------
+    # RECUPERA IL PUNTEGGIO
+    # -----------------------------------
 
     cursor.execute("""
         SELECT score
@@ -221,14 +313,28 @@ def quiz():
 
     score = cursor.fetchone()[0]
 
-    cursor.execute("""
-        SELECT *
-        FROM questions
-        ORDER BY RANDOM()
-        LIMIT 1
-    """)
+    # -----------------------------------
+    # RECUPERA ID CORSO PYTHON
+    # -----------------------------------
 
-    question = cursor.fetchone()
+    cursor.execute("""
+        SELECT id
+        FROM courses
+        WHERE name = ?
+    """, ("Python",))
+
+    course = cursor.fetchone()
+
+    if course is None:
+        connection.close()
+        return "Python course not found", 404
+
+    course_id = course[0]
+
+    # -----------------------------------
+    # SE L'UTENTE HA RISPOSTO
+    # CONTROLLA PRIMA LA RISPOSTA
+    # -----------------------------------
 
     if request.method == "POST":
 
@@ -239,9 +345,19 @@ def quiz():
             SELECT correct_answer
             FROM questions
             WHERE id = ?
-        """, (question_id,))
+            AND course_id = ?
+        """, (
+            question_id,
+            course_id
+        ))
 
-        correct_answer = cursor.fetchone()[0]
+        result = cursor.fetchone()
+
+        if result is None:
+            connection.close()
+            return "Question not found", 404
+
+        correct_answer = result[0]
 
         if answer == correct_answer:
 
@@ -258,7 +374,58 @@ def quiz():
             message = "Correct! +10 points"
 
         else:
+
             message = "Wrong answer!"
+
+    # -----------------------------------
+    # ORA RECUPERA LA PROSSIMA DOMANDA
+    # -----------------------------------
+
+    if selected_topic and selected_difficulty:
+
+        cursor.execute("""
+            SELECT *
+            FROM questions
+            WHERE course_id = ?
+            AND topic_id = ?
+            AND difficulty = ?
+            ORDER BY RANDOM()
+            LIMIT 1
+        """, (
+            course_id,
+            selected_topic,
+            selected_difficulty
+        ))
+
+    elif selected_topic:
+
+        cursor.execute("""
+            SELECT *
+            FROM questions
+            WHERE course_id = ?
+            AND topic_id = ?
+            ORDER BY RANDOM()
+            LIMIT 1
+        """, (
+            course_id,
+            selected_topic
+        ))
+
+    else:
+
+        cursor.execute("""
+            SELECT *
+            FROM questions
+            WHERE course_id = ?
+            ORDER BY RANDOM()
+            LIMIT 1
+        """, (course_id,))
+
+    question = cursor.fetchone()
+
+    if question is None:
+        connection.close()
+        return "No questions available for this topic and difficulty", 404
 
     connection.close()
 
@@ -266,7 +433,9 @@ def quiz():
         "quiz.html",
         question=question,
         message=message,
-        score=score
+        score=score,
+        selected_topic=selected_topic,
+        selected_difficulty=selected_difficulty
     )
 
 @app.route("/ranking")
@@ -302,6 +471,13 @@ def admin():
 
     message = ""
 
+    selected_topic = request.args.get("topic")
+    selected_difficulty = request.args.get("difficulty")
+
+    # -----------------------------------
+    # AGGIUNTA DI UNA NUOVA DOMANDA
+    # -----------------------------------
+
     if request.method == "POST":
 
         question = request.form.get("question")
@@ -309,6 +485,8 @@ def admin():
         option2 = request.form.get("option2")
         option3 = request.form.get("option3")
         option4 = request.form.get("option4")
+        topic_id = request.form.get("topic_id")
+        difficulty = request.form.get("difficulty")
         correct_option = request.form.get("correct_answer")
 
         options = {
@@ -323,6 +501,22 @@ def admin():
         connection = sqlite3.connect("database.db")
         cursor = connection.cursor()
 
+        # Recupera l'id del corso Python
+        cursor.execute("""
+            SELECT id
+            FROM courses
+            WHERE name = ?
+        """, ("Python",))
+
+        course = cursor.fetchone()
+
+        if course is None:
+            connection.close()
+            return "Python course not found", 404
+
+        course_id = course[0]
+
+        # Inserisce la nuova domanda
         cursor.execute("""
             INSERT INTO questions
             (
@@ -331,16 +525,22 @@ def admin():
                 option2,
                 option3,
                 option4,
-                correct_answer
+                correct_answer,
+                course_id,
+                topic_id,
+                difficulty
             )
-            VALUES (?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, (
             question,
             option1,
             option2,
             option3,
             option4,
-            correct_answer
+            correct_answer,
+            course_id,
+            topic_id,
+            difficulty
         ))
 
         connection.commit()
@@ -348,21 +548,132 @@ def admin():
 
         message = "Domanda aggiunta con successo!"
 
+    # -----------------------------------
+    # RECUPERA I TOPIC PYTHON
+    # -----------------------------------
+
     connection = sqlite3.connect("database.db")
     cursor = connection.cursor()
 
     cursor.execute("""
         SELECT
-            id,
-            question,
-            option1,
-            option2,
-            option3,
-            option4,
-            correct_answer
-        FROM questions
-        ORDER BY id DESC
-    """)
+            topics.id,
+            topics.name
+        FROM topics
+        JOIN courses
+            ON topics.course_id = courses.id
+        WHERE courses.name = ?
+        ORDER BY topics.name
+    """, ("Python",))
+
+    topics = cursor.fetchall()
+
+    # -----------------------------------
+    # RECUPERA LE DOMANDE
+    # CON FILTRO TOPIC + DIFFICULTY
+    # -----------------------------------
+
+    if selected_topic and selected_difficulty:
+
+        cursor.execute("""
+            SELECT
+                questions.id,
+                questions.question,
+                questions.option1,
+                questions.option2,
+                questions.option3,
+                questions.option4,
+                questions.correct_answer,
+                topics.name,
+                questions.difficulty
+            FROM questions
+            LEFT JOIN topics
+                ON questions.topic_id = topics.id
+            JOIN courses
+                ON questions.course_id = courses.id
+            WHERE courses.name = ?
+            AND questions.topic_id = ?
+            AND questions.difficulty = ?
+            ORDER BY questions.id DESC
+        """, (
+            "Python",
+            selected_topic,
+            selected_difficulty
+        ))
+
+    elif selected_topic:
+
+        cursor.execute("""
+            SELECT
+                questions.id,
+                questions.question,
+                questions.option1,
+                questions.option2,
+                questions.option3,
+                questions.option4,
+                questions.correct_answer,
+                topics.name,
+                questions.difficulty
+            FROM questions
+            LEFT JOIN topics
+                ON questions.topic_id = topics.id
+            JOIN courses
+                ON questions.course_id = courses.id
+            WHERE courses.name = ?
+            AND questions.topic_id = ?
+            ORDER BY questions.id DESC
+        """, (
+            "Python",
+            selected_topic
+        ))
+
+    elif selected_difficulty:
+
+        cursor.execute("""
+            SELECT
+                questions.id,
+                questions.question,
+                questions.option1,
+                questions.option2,
+                questions.option3,
+                questions.option4,
+                questions.correct_answer,
+                topics.name,
+                questions.difficulty
+            FROM questions
+            LEFT JOIN topics
+                ON questions.topic_id = topics.id
+            JOIN courses
+                ON questions.course_id = courses.id
+            WHERE courses.name = ?
+            AND questions.difficulty = ?
+            ORDER BY questions.id DESC
+        """, (
+            "Python",
+            selected_difficulty
+        ))
+
+    else:
+
+        cursor.execute("""
+            SELECT
+                questions.id,
+                questions.question,
+                questions.option1,
+                questions.option2,
+                questions.option3,
+                questions.option4,
+                questions.correct_answer,
+                topics.name,
+                questions.difficulty
+            FROM questions
+            LEFT JOIN topics
+                ON questions.topic_id = topics.id
+            JOIN courses
+                ON questions.course_id = courses.id
+            WHERE courses.name = ?
+            ORDER BY questions.id DESC
+        """, ("Python",))
 
     questions = cursor.fetchall()
 
@@ -371,7 +682,10 @@ def admin():
     return render_template(
         "admin.html",
         message=message,
-        questions=questions
+        questions=questions,
+        topics=topics,
+        selected_topic=selected_topic,
+        selected_difficulty=selected_difficulty
     )
 
 @app.route("/admin/delete/<int:question_id>", methods=["POST"])
@@ -418,6 +732,7 @@ def edit_question(question_id):
         option2 = request.form.get("option2")
         option3 = request.form.get("option3")
         option4 = request.form.get("option4")
+        topic_id = request.form.get("topic_id")
         correct_option = request.form.get("correct_answer")
 
         options = {
@@ -437,7 +752,8 @@ def edit_question(question_id):
                 option2 = ?,
                 option3 = ?,
                 option4 = ?,
-                correct_answer = ?
+                correct_answer = ?,
+                topic_id = ?
             WHERE id = ?
         """, (
             question_text,
@@ -446,6 +762,7 @@ def edit_question(question_id):
             option3,
             option4,
             correct_answer,
+            topic_id,
             question_id
         ))
 
@@ -462,21 +779,81 @@ def edit_question(question_id):
             option2,
             option3,
             option4,
-            correct_answer
+            correct_answer,
+            topic_id,
+            difficulty
         FROM questions
         WHERE id = ?
     """, (question_id,))
 
     question = cursor.fetchone()
 
-    connection.close()
-
     if question is None:
+        connection.close()
         return "Question not found", 404
+
+    cursor.execute("""
+        SELECT topics.id, topics.name
+        FROM topics
+        JOIN courses
+            ON topics.course_id = courses.id
+        WHERE courses.name = ?
+        ORDER BY topics.name
+    """, ("Python",))
+
+    topics = cursor.fetchall()
+
+    connection.close()
 
     return render_template(
         "edit_question.html",
-        question=question
+        question=question,
+        topics=topics
+    )
+
+@app.route("/quiz/topics")
+def quiz_topics():
+
+    if "user_id" not in session:
+        return redirect("/login")
+
+    connection = sqlite3.connect("database.db")
+    cursor = connection.cursor()
+
+    cursor.execute("""
+        SELECT
+            topics.id,
+            topics.name
+        FROM topics
+        JOIN courses
+            ON topics.course_id = courses.id
+        WHERE courses.name = ?
+        ORDER BY topics.name
+    """, ("Python",))
+
+    topics = cursor.fetchall()
+
+    connection.close()
+
+    return render_template(
+        "quiz_topics.html",
+        topics=topics
+    )
+
+@app.route("/quiz/difficulty")
+def quiz_difficulty():
+
+    if "user_id" not in session:
+        return redirect("/login")
+
+    selected_topic = request.args.get("topic")
+
+    if not selected_topic:
+        return redirect("/quiz/topics")
+
+    return render_template(
+        "quiz_difficulty.html",
+        selected_topic=selected_topic
     )
 
 if __name__ == "__main__":

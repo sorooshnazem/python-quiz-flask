@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <h1 class="mb-3">
+        Scegli la difficoltà
+    </h1>
+
+    <p class="mb-4">
+        Seleziona il livello del quiz.
+    </p>
+
+    <div class="row">
+
+        <div class="col-md-4 mb-3">
+
+            <div class="card h-100">
+
+                <div class="card-body">
+
+                    <h5 class="card-title">
+                        Beginner
+                    </h5>
+
+                    <a
+                        href="/quiz?topic={{ selected_topic }}&difficulty=Beginner"
+                        class="btn btn-primary"
+                    >
+                        Inizia
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4 mb-3">
+
+            <div class="card h-100">
+
+                <div class="card-body">
+
+                    <h5 class="card-title">
+                        Intermediate
+                    </h5>
+
+                    <a
+                        href="/quiz?topic={{ selected_topic }}&difficulty=Intermediate"
+                        class="btn btn-primary"
+                    >
+                        Inizia
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4 mb-3">
+
+            <div class="card h-100">
+
+                <div class="card-body">
+
+                    <h5 class="card-title">
+                        Advanced
+                    </h5>
+
+                    <a
+                        href="/quiz?topic={{ selected_topic }}&difficulty=Advanced"
+                        class="btn btn-primary"
+                    >
+                        Inizia
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

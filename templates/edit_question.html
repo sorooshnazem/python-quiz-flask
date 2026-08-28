@@ -74,6 +74,32 @@ Modifica domanda
         >
     </div>
 
+    <div class="mb-3">
+
+        <label class="form-label">
+            Topic
+        </label>
+
+        <select
+            class="form-select"
+            name="topic_id"
+            required
+        >
+
+            {% for topic in topics %}
+
+                <option
+                    value="{{ topic[0] }}"
+                    {% if topic[0] == question[7] %}selected{% endif %}
+                >
+                    {{ topic[1] }}
+                </option>
+
+            {% endfor %}
+
+        </select>
+
+    </div>
 
     <div class="mb-3">
 
