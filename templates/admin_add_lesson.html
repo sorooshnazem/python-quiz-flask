@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block title %}
+Add Lesson
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-7">
+
+            <div class="mb-4">
+
+                <a
+                    href="/admin/lessons"
+                    class="text-decoration-none"
+                >
+                    ← Back to Lessons
+                </a>
+
+            </div>
+
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-body p-5">
+
+                    <h1 class="fw-bold mb-2">
+                        Add New Lesson
+                    </h1>
+
+                    <p class="text-muted mb-4">
+                        Crea una nuova lezione per il corso Python.
+                    </p>
+
+
+                    {% if error %}
+
+                    <div class="alert alert-danger">
+                        {{ error }}
+                    </div>
+
+                    {% endif %}
+
+
+                    <form method="POST">
+
+
+                        <!-- LESSON TITLE -->
+
+                        <div class="mb-4">
+
+                            <label
+                                for="title"
+                                class="form-label fw-bold"
+                            >
+                                Lesson Title
+                            </label>
+
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="title"
+                                name="title"
+                                placeholder="Example: Comments"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- TOPIC -->
+
+                        <div class="mb-4">
+
+                            <label
+                                for="topic_id"
+                                class="form-label fw-bold"
+                            >
+                                Topic
+                            </label>
+
+                            <select
+                                class="form-select"
+                                id="topic_id"
+                                name="topic_id"
+                                required
+                            >
+
+                                <option value="">
+                                    Select topic
+                                </option>
+
+                                {% for topic in topics %}
+
+                                <option value="{{ topic[0] }}">
+                                    {{ topic[1] }}
+                                </option>
+
+                                {% endfor %}
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- ORDER -->
+
+                        <div class="mb-4">
+
+                            <label
+                                for="lesson_order"
+                                class="form-label fw-bold"
+                            >
+                                Lesson Order
+                            </label>
+
+                            <input
+                                type="number"
+                                class="form-control"
+                                id="lesson_order"
+                                name="lesson_order"
+                                min="1"
+                                placeholder="Example: 7"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- BUTTON -->
+
+                        <div class="d-grid">
+
+                            <button
+                                type="submit"
+                                class="btn btn-success btn-lg"
+                            >
+                                Create Lesson
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

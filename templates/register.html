@@ -1,41 +1,232 @@
 {% extends "base.html" %}
 
 {% block title %}
-Register
+Register - SOPRO
 {% endblock %}
+
 
 {% block content %}
 
-<h1>Register</h1>
+<div class="container py-5">
 
-{% if message %}
-    <p>{{ message }}</p>
-{% endif %}
+    <div class="row justify-content-center">
 
-<form method="POST">
+        <div class="col-md-8 col-lg-5">
 
-    <label>Username:</label>
-    <input type="text" name="username">
+            <!-- =====================================================
+                 HEADER
+            ====================================================== -->
 
-    <br><br>
+            <div class="text-center mb-4">
 
-    <label>Password:</label>
-    <input type="password" name="password">
+                <div class="auth-icon mb-3">
+                    🚀
+                </div>
 
-    <br><br>
+                <h1 class="fw-bold mb-2">
+                    Create your account
+                </h1>
 
-    <label>Confirm Password:</label>
-    <input type="password" name="confirm_password">
+                <p class="text-muted">
+                    Crea il tuo account e inizia
+                    il tuo percorso di apprendimento Python.
+                </p>
 
-    <br><br>
+            </div>
 
-    <label>Nickname:</label>
-    <input type="text" name="nickname">
 
-    <br><br>
+            <!-- =====================================================
+                 REGISTER CARD
+            ====================================================== -->
 
-    <button type="submit">Register</button>
+            <div
+                class="
+                    auth-card
+                    card
+                    border-0
+                    shadow-sm
+                    rounded-4
+                "
+            >
 
-</form>
+                <div class="card-body p-4 p-md-5">
+
+
+                    <!-- MESSAGE -->
+
+                    {% if message %}
+
+                        <div
+                            class="
+                                alert
+                                alert-danger
+                                rounded-3
+                                mb-4
+                            "
+                        >
+                            {{ message }}
+                        </div>
+
+                    {% endif %}
+
+
+                    <!-- =================================================
+                         REGISTER FORM
+                    ================================================== -->
+
+                    <form method="POST">
+
+
+                        <!-- USERNAME -->
+
+                        <div class="mb-4">
+
+                            <label
+                                for="username"
+                                class="form-label fw-semibold"
+                            >
+                                Username
+                            </label>
+
+                            <input
+                                type="text"
+                                id="username"
+                                name="username"
+                                class="form-control form-control-lg"
+                                placeholder="Scegli uno username"
+                                autocomplete="username"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- NICKNAME -->
+
+                        <div class="mb-4">
+
+                            <label
+                                for="nickname"
+                                class="form-label fw-semibold"
+                            >
+                                Nickname
+                            </label>
+
+                            <input
+                                type="text"
+                                id="nickname"
+                                name="nickname"
+                                class="form-control form-control-lg"
+                                placeholder="Scegli il tuo nickname"
+                                required
+                            >
+
+                            <div class="form-text">
+                                Il nickname sarà visibile nella classifica.
+                            </div>
+
+                        </div>
+
+
+                        <!-- PASSWORD -->
+
+                        <div class="mb-4">
+
+                            <label
+                                for="password"
+                                class="form-label fw-semibold"
+                            >
+                                Password
+                            </label>
+
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                class="form-control form-control-lg"
+                                placeholder="Crea una password"
+                                autocomplete="new-password"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- CONFIRM PASSWORD -->
+
+                        <div class="mb-4">
+
+                            <label
+                                for="confirm_password"
+                                class="form-label fw-semibold"
+                            >
+                                Confirm Password
+                            </label>
+
+                            <input
+                                type="password"
+                                id="confirm_password"
+                                name="confirm_password"
+                                class="form-control form-control-lg"
+                                placeholder="Ripeti la password"
+                                autocomplete="new-password"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- REGISTER BUTTON -->
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary btn-lg w-100"
+                        >
+                            Create Account →
+                        </button>
+
+                    </form>
+
+
+                    <!-- LOGIN LINK -->
+
+                    <div class="text-center mt-4">
+
+                        <span class="text-muted">
+                            Hai già un account?
+                        </span>
+
+                        <a
+                            href="/login"
+                            class="text-decoration-none fw-semibold"
+                        >
+                            Login
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- BACK HOME -->
+
+            <div class="text-center mt-4">
+
+                <a
+                    href="/"
+                    class="text-decoration-none text-muted"
+                >
+                    ← Back to Home
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
 {% endblock %}

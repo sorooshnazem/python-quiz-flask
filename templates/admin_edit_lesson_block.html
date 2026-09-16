@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+
+{% block title %}
+Edit Lesson Block
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="mb-4">
+
+                <a
+                    href="/admin/lessons/{{ lesson[0] }}/blocks"
+                    class="text-decoration-none"
+                >
+                    ← Back to Blocks
+                </a>
+
+            </div>
+
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-body p-5">
+
+                    <h1 class="fw-bold mb-2">
+                        Edit Block
+                    </h1>
+
+                    <p class="text-muted mb-4">
+                        Lesson: {{ lesson[1] }}
+                    </p>
+
+
+                    {% if error %}
+
+                    <div class="alert alert-danger">
+                        {{ error }}
+                    </div>
+
+                    {% endif %}
+
+
+                    <form method="POST">
+
+
+                        <!-- BLOCK TYPE -->
+
+                        <div class="mb-4">
+
+                            <label
+                                for="block_type"
+                                class="form-label fw-bold"
+                            >
+                                Block Type
+                            </label>
+
+                            <select
+                                class="form-select"
+                                id="block_type"
+                                name="block_type"
+                                required
+                            >
+
+                                <option
+                                    value="text"
+                                    {% if block[1] == "text" %}selected{% endif %}
+                                >
+                                    Text
+                                </option>
+
+                                <option
+                                    value="code"
+                                    {% if block[1] == "code" %}selected{% endif %}
+                                >
+                                    Code
+                                </option>
+
+                                <option
+                                    value="output"
+                                    {% if block[1] == "output" %}selected{% endif %}
+                                >
+                                    Output
+                                </option>
+
+                                <option
+                                    value="explanation"
+                                    {% if block[1] == "explanation" %}selected{% endif %}
+                                >
+                                    Explanation
+                                </option>
+
+                                <option
+                                    value="warning"
+                                    {% if block[1] == "warning" %}selected{% endif %}
+                                >
+                                    Warning
+                                </option>
+
+                                <option
+                                    value="example"
+                                    {% if block[1] == "example" %}selected{% endif %}
+                                >
+                                    Example
+                                </option>
+
+                                <option
+                                    value="exercise"
+                                    {% if block[1] == "exercise" %}selected{% endif %}
+                                >
+                                    Exercise
+                                </option>
+
+                                <option
+                                    value="note"
+                                    {% if block[1] == "note" %}selected{% endif %}
+                                >
+                                    Note
+                                </option>
+
+                                <option
+                                    value="diagram"
+                                    {% if block[1] == "diagram" %}selected{% endif %}
+                                >
+                                    Diagram
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- CONTENT -->
+
+                        <div class="mb-4">
+
+                            <label
+                                for="content"
+                                class="form-label fw-bold"
+                            >
+                                Content
+                            </label>
+
+                            <textarea
+                                class="form-control"
+                                id="content"
+                                name="content"
+                                rows="10"
+                                required
+                            >{{ block[2] }}</textarea>
+
+                        </div>
+
+
+                        <!-- ORDER -->
+
+                        <div class="mb-4">
+
+                            <label
+                                for="block_order"
+                                class="form-label fw-bold"
+                            >
+                                Block Order
+                            </label>
+
+                            <input
+                                type="number"
+                                class="form-control"
+                                id="block_order"
+                                name="block_order"
+                                min="1"
+                                value="{{ block[3] }}"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="d-grid">
+
+                            <button
+                                type="submit"
+                                class="btn btn-warning btn-lg"
+                            >
+                                Save Changes
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,105 +1,429 @@
 {% extends "base.html" %}
 
 {% block title %}
-Home
+SOPRO - Learn Python
 {% endblock %}
 
 {% block content %}
 
-<div class="text-center mt-5">
+<!-- =====================================================
+     HERO
+===================================================== -->
 
-    <h1 class="display-4">
-        Python Quiz
-    </h1>
+<section class="home-hero rounded-4 p-4 p-md-5 mt-4 mb-5">
 
-    <p class="lead mt-3">
-        Metti alla prova le tue conoscenze di Python,
-        accumula punti e confronta il tuo risultato
-        con quello degli altri utenti.
+    <div class="row align-items-center">
+
+        <div class="col-lg-7">
+
+            <span class="badge bg-primary px-3 py-2 mb-3">
+                PYTHON LEARNING PLATFORM
+            </span>
+
+            <h1 class="display-4 fw-bold mb-3">
+                Learn Python.
+                <br>
+                Step by step.
+            </h1>
+
+            <p class="lead text-muted mb-4">
+
+                Impara Python attraverso lezioni chiare,
+                esempi pratici, esercizi e quiz.
+
+                Parti dalle basi e costruisci le tue
+                conoscenze un passo alla volta.
+
+            </p>
+
+
+            {% if username %}
+
+                <p class="fs-5 mb-4">
+                    👋 Benvenuto,
+                    <strong>{{ username }}</strong>!
+                </p>
+
+                <div class="d-flex flex-wrap gap-2">
+
+                    <a
+                        href="/lessons"
+                        class="btn btn-primary btn-lg"
+                    >
+                        🚀 Start Learning
+                    </a>
+
+                    <a
+                        href="/quiz"
+                        class="btn btn-outline-primary btn-lg"
+                    >
+                        🧠 Take a Quiz
+                    </a>
+
+                </div>
+
+
+            {% else %}
+
+                <div class="d-flex flex-wrap gap-2">
+
+                    <a
+                        href="/register"
+                        class="btn btn-primary btn-lg"
+                    >
+                        🚀 Start Learning
+                    </a>
+
+                    <a
+                        href="/login"
+                        class="btn btn-outline-primary btn-lg"
+                    >
+                        Login
+                    </a>
+
+                </div>
+
+                <p class="small text-muted mt-3 mb-0">
+                    Crea gratuitamente il tuo account
+                    per iniziare.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- HERO VISUAL -->
+
+        <div class="col-lg-5 d-none d-lg-block">
+
+            <div class="home-code-preview shadow-lg rounded-4">
+
+                <div class="home-code-header">
+                    <span>●</span>
+                    <span>●</span>
+                    <span>●</span>
+
+                    <span class="ms-2">
+                        python
+                    </span>
+                </div>
+
+                <pre class="mb-0"><code>name = "Student"
+
+language = "Python"
+
+print(
+    "Hello",
+    name
+)
+
+print(
+    "Let's learn",
+    language
+)</code></pre>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     FEATURES
+===================================================== -->
+
+<section class="py-5">
+
+    <div class="text-center mb-5">
+
+        <h2 class="fw-bold">
+            Everything you need to learn
+        </h2>
+
+        <p class="text-muted">
+            Studia, fai pratica e verifica ciò che hai imparato.
+        </p>
+
+    </div>
+
+
+    <div class="row g-4">
+
+        <!-- LESSONS -->
+
+        <div class="col-md-4">
+
+            <div
+                class="
+                    home-feature-card
+                    card
+                    h-100
+                    border-0
+                    shadow-sm
+                    rounded-4
+                "
+            >
+
+                <div class="card-body p-4 text-center">
+
+                    <div class="home-feature-icon mb-3">
+                        📚
+                    </div>
+
+                    <h4 class="fw-bold">
+                        Lessons
+                    </h4>
+
+                    <p class="text-muted mb-0">
+
+                        Impara ogni concetto passo dopo passo
+                        con spiegazioni semplici e progressive.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- EXAMPLES -->
+
+        <div class="col-md-4">
+
+            <div
+                class="
+                    home-feature-card
+                    card
+                    h-100
+                    border-0
+                    shadow-sm
+                    rounded-4
+                "
+            >
+
+                <div class="card-body p-4 text-center">
+
+                    <div class="home-feature-icon mb-3">
+                        💻
+                    </div>
+
+                    <h4 class="fw-bold">
+                        Practice
+                    </h4>
+
+                    <p class="text-muted mb-0">
+
+                        Impara attraverso codice,
+                        esempi pratici ed esercizi
+                        da provare personalmente.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- QUIZ -->
+
+        <div class="col-md-4">
+
+            <div
+                class="
+                    home-feature-card
+                    card
+                    h-100
+                    border-0
+                    shadow-sm
+                    rounded-4
+                "
+            >
+
+                <div class="card-body p-4 text-center">
+
+                    <div class="home-feature-icon mb-3">
+                        🧠
+                    </div>
+
+                    <h4 class="fw-bold">
+                        Quiz
+                    </h4>
+
+                    <p class="text-muted mb-0">
+
+                        Verifica le tue conoscenze,
+                        guadagna punti e confronta
+                        i risultati nella classifica.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     HOW IT WORKS
+===================================================== -->
+
+<section class="py-5">
+
+    <div class="text-center mb-5">
+
+        <h2 class="fw-bold">
+            How it works
+        </h2>
+
+        <p class="text-muted">
+            Un percorso semplice in tre passaggi.
+        </p>
+
+    </div>
+
+
+    <div class="row text-center g-4">
+
+        <div class="col-md-4">
+
+            <div class="home-step-number">
+                1
+            </div>
+
+            <h4 class="fw-bold mt-3">
+                Learn
+            </h4>
+
+            <p class="text-muted">
+                Studia una lezione e scopri
+                un nuovo concetto.
+            </p>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="home-step-number">
+                2
+            </div>
+
+            <h4 class="fw-bold mt-3">
+                Practice
+            </h4>
+
+            <p class="text-muted">
+                Segui gli esempi e prova
+                gli esercizi proposti.
+            </p>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="home-step-number">
+                3
+            </div>
+
+            <h4 class="fw-bold mt-3">
+                Test
+            </h4>
+
+            <p class="text-muted">
+                Completa i quiz e verifica
+                quello che hai imparato.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     FINAL CTA
+===================================================== -->
+
+<section class="home-cta rounded-4 text-center p-4 p-md-5 my-5">
+
+    <div class="fs-1 mb-3">
+        🚀
+    </div>
+
+    <h2 class="fw-bold mb-3">
+        Ready to start learning?
+    </h2>
+
+    <p class="text-muted fs-5 mb-4">
+
+        Inizia dalle basi e costruisci
+        le tue competenze Python passo dopo passo.
+
     </p>
+
 
     {% if username %}
 
-        <h4 class="mt-4">
-            Benvenuto {{ username }}!
-        </h4>
-
         <a
-            href="/quiz"
-            class="btn btn-primary btn-lg mt-3"
+            href="/lessons"
+            class="btn btn-primary btn-lg px-4"
         >
-            Inizia il Quiz
+            Start Python →
         </a>
 
         <a
             href="/ranking"
-            class="btn btn-outline-secondary btn-lg mt-3"
+            class="btn btn-outline-secondary btn-lg px-4 ms-2"
         >
-            Visualizza la Classifica
+            Ranking
         </a>
-
-        {% if session.get("role") == "admin" %}
-
-            <a
-                href="/admin"
-                class="btn btn-warning btn-lg mt-3"
-            >
-                Admin Panel
-            </a>
-
-        {% endif %}
 
     {% else %}
 
-        <div class="mt-4">
-
-            <a
-                href="/login"
-                class="btn btn-success btn-lg me-2"
-            >
-                Login
-            </a>
-
-            <a
-                href="/register"
-                class="btn btn-outline-primary btn-lg"
-            >
-                Registrati
-            </a>
-
-        </div>
+        <a
+            href="/register"
+            class="btn btn-primary btn-lg px-4"
+        >
+            Create Account →
+        </a>
 
     {% endif %}
 
-</div>
+</section>
 
-<hr class="my-5">
 
-<div class="row text-center">
+<!-- =====================================================
+     ADMIN
+===================================================== -->
 
-    <div class="col-md-4">
-        <h3>Quiz Python</h3>
-        <p>
-            Rispondi a domande casuali su Python
-            e verifica le tue conoscenze.
-        </p>
+{% if session.get("role") == "admin" %}
+
+    <div class="text-center mb-5">
+
+        <a
+            href="/admin"
+            class="btn btn-warning"
+        >
+            ⚙️ Admin Panel
+        </a>
+
     </div>
 
-    <div class="col-md-4">
-        <h3>Punteggio</h3>
-        <p>
-            Guadagna 10 punti per ogni risposta corretta.
-        </p>
-    </div>
-
-    <div class="col-md-4">
-        <h3>Classifica</h3>
-        <p>
-            Confronta il tuo punteggio con quello
-            degli altri utenti.
-        </p>
-    </div>
-
-</div>
+{% endif %}
 
 {% endblock %}

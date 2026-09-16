@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block title %}
+Edit Lesson
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-7">
+
+            <div class="mb-4">
+
+                <a
+                    href="/admin/lessons"
+                    class="text-decoration-none"
+                >
+                    ← Back to Lessons
+                </a>
+
+            </div>
+
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-body p-5">
+
+                    <h1 class="fw-bold mb-2">
+                        Edit Lesson
+                    </h1>
+
+                    <p class="text-muted mb-4">
+                        Modifica le informazioni della lezione.
+                    </p>
+
+
+                    {% if error %}
+
+                    <div class="alert alert-danger">
+                        {{ error }}
+                    </div>
+
+                    {% endif %}
+
+
+                    <form method="POST">
+
+
+                        <!-- TITLE -->
+
+                        <div class="mb-4">
+
+                            <label
+                                for="title"
+                                class="form-label fw-bold"
+                            >
+                                Lesson Title
+                            </label>
+
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="title"
+                                name="title"
+                                value="{{ lesson[1] }}"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- TOPIC -->
+
+                        <div class="mb-4">
+
+                            <label
+                                for="topic_id"
+                                class="form-label fw-bold"
+                            >
+                                Topic
+                            </label>
+
+                            <select
+                                class="form-select"
+                                id="topic_id"
+                                name="topic_id"
+                                required
+                            >
+
+                                {% for topic in topics %}
+
+                                <option
+                                    value="{{ topic[0] }}"
+
+                                    {% if topic[0] == lesson[2] %}
+                                        selected
+                                    {% endif %}
+                                >
+                                    {{ topic[1] }}
+                                </option>
+
+                                {% endfor %}
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- ORDER -->
+
+                        <div class="mb-4">
+
+                            <label
+                                for="lesson_order"
+                                class="form-label fw-bold"
+                            >
+                                Lesson Order
+                            </label>
+
+                            <input
+                                type="number"
+                                class="form-control"
+                                id="lesson_order"
+                                name="lesson_order"
+                                value="{{ lesson[3] }}"
+                                min="1"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- BUTTON -->
+
+                        <div class="d-grid">
+
+                            <button
+                                type="submit"
+                                class="btn btn-warning btn-lg"
+                            >
+                                Save Changes
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

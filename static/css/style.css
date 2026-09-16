@@ -1,0 +1,541 @@
+/* =========================================================
+   SOPRO - GLOBAL STYLES
+========================================================= */
+
+
+/* ---------------------------------------------------------
+   GENERAL
+--------------------------------------------------------- */
+
+body {
+    background-color: #ffffff;
+}
+
+
+/* ---------------------------------------------------------
+   LESSON HEADER
+--------------------------------------------------------- */
+
+.lesson-header {
+    background: linear-gradient(
+        135deg,
+        #f8f9ff 0%,
+        #eef3ff 100%
+    );
+
+    border: 1px solid #e4e9f5;
+}
+
+
+/* ---------------------------------------------------------
+   LESSON TEXT
+--------------------------------------------------------- */
+
+.lesson-text {
+    white-space: pre-line;
+    line-height: 1.8;
+}
+
+
+/* ---------------------------------------------------------
+   EXPLANATION
+--------------------------------------------------------- */
+
+.lesson-explanation {
+    border-left: 5px solid #0d6efd !important;
+    background-color: #f8fbff;
+}
+
+
+/* ---------------------------------------------------------
+   CODE
+--------------------------------------------------------- */
+
+.lesson-code {
+    background-color: #1e1e1e;
+}
+
+.lesson-code-header {
+    background-color: #2d2d2d;
+    border-bottom: 1px solid #444;
+}
+
+.lesson-code-language {
+    color: #adb5bd;
+}
+
+.lesson-code-label {
+    color: #6c757d;
+}
+
+.lesson-code pre {
+    color: #f8f8f2;
+    white-space: pre-wrap;
+    font-size: 0.95rem;
+}
+
+
+/* ---------------------------------------------------------
+   OUTPUT
+--------------------------------------------------------- */
+
+.lesson-output {
+    background-color: #f8f9fa;
+}
+
+.lesson-output-header {
+    background-color: #eef0f2;
+}
+
+.lesson-output pre {
+    white-space: pre-wrap;
+}
+
+
+/* ---------------------------------------------------------
+   EXAMPLE
+--------------------------------------------------------- */
+
+.lesson-example {
+    background-color: #f4f8ff;
+    border-left: 5px solid #6f42c1 !important;
+}
+
+
+/* ---------------------------------------------------------
+   EXERCISE
+--------------------------------------------------------- */
+
+.lesson-exercise {
+    border: 2px solid #198754;
+    background-color: #f7fff9;
+}
+
+
+/* ---------------------------------------------------------
+   END OF LESSON
+--------------------------------------------------------- */
+
+.lesson-complete {
+    background: linear-gradient(
+        135deg,
+        #eef4ff 0%,
+        #f8f5ff 100%
+    );
+}
+
+
+/* ---------------------------------------------------------
+   UTILITIES
+--------------------------------------------------------- */
+
+.preserve-lines {
+    white-space: pre-line;
+}
+
+/* =========================================================
+   LESSONS PAGE
+========================================================= */
+
+.lessons-intro {
+    max-width: 650px;
+}
+
+
+/* ---------------------------------------------------------
+   LESSON CARD
+--------------------------------------------------------- */
+
+.lesson-card {
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.lesson-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.10) !important;
+}
+
+
+/* ---------------------------------------------------------
+   LEARNING MESSAGE
+--------------------------------------------------------- */
+
+.learning-message {
+    background: linear-gradient(
+        135deg,
+        #f8f9ff 0%,
+        #eef3ff 100%
+    );
+
+    border: 1px solid #e4e9f5;
+}
+
+/* =========================================================
+   HOME PAGE
+========================================================= */
+
+
+/* ---------------------------------------------------------
+   HERO
+--------------------------------------------------------- */
+
+.home-hero {
+    background: linear-gradient(
+        135deg,
+        #f8f9ff 0%,
+        #eef3ff 100%
+    );
+
+    border: 1px solid #e4e9f5;
+}
+
+
+/* ---------------------------------------------------------
+   CODE PREVIEW
+--------------------------------------------------------- */
+
+.home-code-preview {
+    background-color: #1e1e1e;
+    overflow: hidden;
+}
+
+.home-code-header {
+    background-color: #2d2d2d;
+    color: #adb5bd;
+    padding: 12px 18px;
+    font-size: 0.85rem;
+}
+
+.home-code-header span:nth-child(1),
+.home-code-header span:nth-child(2),
+.home-code-header span:nth-child(3) {
+    margin-right: 4px;
+}
+
+.home-code-preview pre {
+    color: #f8f8f2;
+    padding: 30px;
+    font-size: 1rem;
+    line-height: 1.7;
+}
+
+
+/* ---------------------------------------------------------
+   FEATURE CARDS
+--------------------------------------------------------- */
+
+.home-feature-card {
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.home-feature-card:hover {
+    transform: translateY(-5px);
+
+    box-shadow:
+        0 0.75rem 1.5rem
+        rgba(0, 0, 0, 0.10) !important;
+}
+
+.home-feature-icon {
+    font-size: 2.5rem;
+}
+
+
+/* ---------------------------------------------------------
+   HOW IT WORKS
+--------------------------------------------------------- */
+
+.home-step-number {
+    width: 55px;
+    height: 55px;
+
+    margin: auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background-color: #0d6efd;
+    color: white;
+
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+
+/* ---------------------------------------------------------
+   FINAL CTA
+--------------------------------------------------------- */
+
+.home-cta {
+    background: linear-gradient(
+        135deg,
+        #f8f9ff 0%,
+        #eef3ff 100%
+    );
+
+    border: 1px solid #e4e9f5;
+}
+
+/* =========================================================
+   QUIZ PAGE
+========================================================= */
+
+
+/* ---------------------------------------------------------
+   QUIZ INFORMATION
+--------------------------------------------------------- */
+
+.quiz-info-card {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+}
+
+
+/* ---------------------------------------------------------
+   QUESTION CARD
+--------------------------------------------------------- */
+
+.quiz-question-card {
+    background-color: #ffffff;
+}
+
+
+/* ---------------------------------------------------------
+   ANSWER OPTIONS
+--------------------------------------------------------- */
+
+.quiz-option {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    width: 100%;
+
+    padding: 16px 18px;
+
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease,
+        transform 0.15s ease;
+}
+
+
+/* Hide default radio button */
+
+.quiz-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+
+/* Hover */
+
+.quiz-option:hover {
+    border-color: #0d6efd;
+    background-color: #f8fbff;
+    transform: translateY(-1px);
+}
+
+
+/* Selected answer */
+
+.quiz-option:has(input[type="radio"]:checked) {
+    border-color: #0d6efd;
+    background-color: #eef5ff;
+}
+
+
+/* ---------------------------------------------------------
+   OPTION LETTER
+--------------------------------------------------------- */
+
+.quiz-option-letter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 38px;
+    height: 38px;
+
+    border-radius: 50%;
+
+    background-color: #f1f3f5;
+
+    font-weight: 700;
+}
+
+
+/* Selected letter */
+
+.quiz-option:has(input[type="radio"]:checked)
+.quiz-option-letter {
+    background-color: #0d6efd;
+    color: white;
+}
+
+/* =========================================================
+   RANKING PAGE
+========================================================= */
+
+
+/* ---------------------------------------------------------
+   RANKING CARD
+--------------------------------------------------------- */
+
+.ranking-card {
+    background-color: #ffffff;
+}
+
+
+/* ---------------------------------------------------------
+   TABLE HEADER
+--------------------------------------------------------- */
+
+.ranking-table-header {
+    background-color: #f8f9fa;
+}
+
+
+/* ---------------------------------------------------------
+   AVATAR
+--------------------------------------------------------- */
+
+.ranking-avatar {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background-color: #eef3ff;
+    color: #0d6efd;
+
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+
+/* ---------------------------------------------------------
+   TABLE ROWS
+--------------------------------------------------------- */
+
+.ranking-card tbody tr {
+    transition: background-color 0.15s ease;
+}
+
+.ranking-card tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+/* =========================================================
+   AUTHENTICATION
+========================================================= */
+
+
+/* ---------------------------------------------------------
+   AUTH CARD
+--------------------------------------------------------- */
+
+.auth-card {
+    background-color: #ffffff;
+}
+
+
+/* ---------------------------------------------------------
+   AUTH ICON
+--------------------------------------------------------- */
+
+.auth-icon {
+    font-size: 2.5rem;
+}
+
+
+/* ---------------------------------------------------------
+   FORM CONTROLS
+--------------------------------------------------------- */
+
+.auth-card .form-control {
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    padding: 12px 16px;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.auth-card .form-control:focus {
+    border-color: #0d6efd;
+
+    box-shadow:
+        0 0 0 0.2rem
+        rgba(13, 110, 253, 0.12);
+}
+
+/* =========================================================
+   BASE LAYOUT
+========================================================= */
+
+
+/* ---------------------------------------------------------
+   BODY
+--------------------------------------------------------- */
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* ---------------------------------------------------------
+   MAIN
+--------------------------------------------------------- */
+
+main {
+    flex: 1;
+}
+
+
+/* ---------------------------------------------------------
+   NAVBAR
+--------------------------------------------------------- */
+
+.navbar-brand {
+    letter-spacing: -0.3px;
+}
+
+.navbar .nav-link {
+    color: rgba(255, 255, 255, 0.8);
+    transition: color 0.2s ease;
+}
+
+.navbar .nav-link:hover {
+    color: #ffffff;
+}
+
+
+/* ---------------------------------------------------------
+   FOOTER
+--------------------------------------------------------- */
+
+.site-footer {
+    border-top: 1px solid #e9ecef;
+    background-color: #f8f9fa;
+}

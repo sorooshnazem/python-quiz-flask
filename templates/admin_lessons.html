@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}
+Manage Lessons
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h1>📚 Manage Lessons</h1>
+            <p class="text-muted">
+                Gestisci tutte le lezioni del corso Python.
+            </p>
+        </div>
+
+        <a
+            href="/admin"
+            class="btn btn-secondary"
+        >
+            ← Back
+        </a>
+
+    </div>
+
+
+    <table class="table table-striped table-bordered align-middle">
+
+        <thead class="table-dark">
+
+            <tr>
+                <th>Ordine</th>
+                <th>Lesson</th>
+                <th>Topic</th>
+                <th width="180">Azioni</th>
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            {% for lesson in lessons %}
+
+            <tr>
+
+                <td>{{ lesson[1] }}</td>
+
+                <td>{{ lesson[2] }}</td>
+
+                <td>
+                    <span class="badge bg-primary">
+                        {{ lesson[3] }}
+                    </span>
+                </td>
+
+                <td>
+                    <a
+                        href="/admin/lessons/{{ lesson[0] }}/blocks"
+                        class="btn btn-sm btn-primary"
+                    >
+                        Blocks
+                    </a>
+
+                    <a
+                        href="/admin/lessons/edit/{{ lesson[0] }}"
+                        class="btn btn-sm btn-warning"
+                    >
+                        Edit
+                    </a>
+
+                    <form
+                        method="POST"
+                        action="/admin/lessons/delete/{{ lesson[0] }}"
+                        class="d-inline"
+                    >
+                        <button
+                            type="submit"
+                            class="btn btn-sm btn-danger"
+                            onclick="return confirm('Sei sicuro di voler eliminare questa lezione?');"
+                        >
+                            Delete
+                        </button>
+                    </form>
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+
+    <div class="mt-4">
+
+        <a
+            href="/admin/lessons/add"
+            class="btn btn-success"
+        >
+            + New Lesson
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

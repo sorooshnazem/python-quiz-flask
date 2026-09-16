@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+
+{% block title %}
+Python Lessons - SOPRO
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container py-5">
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <div class="text-center mb-5">
+
+        <span class="badge bg-primary px-3 py-2 mb-3">
+            PYTHON
+        </span>
+
+        <h1 class="display-5 fw-bold mb-3">
+            Learn Python
+        </h1>
+
+        <p class="text-muted fs-5 mx-auto lessons-intro">
+
+            Impara Python passo dopo passo attraverso
+            spiegazioni, esempi pratici ed esercizi.
+
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         TOPICS
+    ====================================================== -->
+
+    {% for topic_name, lessons in lessons_by_topic.items() %}
+
+        <section class="mb-5">
+
+            <!-- TOPIC HEADER -->
+
+            <div
+                class="
+                    d-flex
+                    justify-content-between
+                    align-items-center
+                    mb-4
+                "
+            >
+
+                <div>
+
+                    <h2 class="fw-bold mb-1">
+                        {{ topic_name }}
+                    </h2>
+
+                    <p class="text-muted mb-0">
+
+                        {{ lessons|length }}
+
+                        {% if lessons|length == 1 %}
+                            lezione disponibile
+                        {% else %}
+                            lezioni disponibili
+                        {% endif %}
+
+                    </p>
+
+                </div>
+
+
+                {% if topic_name == "Basics" %}
+
+                    <span class="badge bg-success px-3 py-2">
+                        Start here
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- =================================================
+                 LESSON CARDS
+            ================================================== -->
+
+            <div class="row g-4">
+
+                {% for lesson in lessons %}
+
+                    <div class="col-md-6 col-lg-4">
+
+                        <div
+                            class="
+                                lesson-card
+                                card
+                                h-100
+                                border-0
+                                shadow-sm
+                                rounded-4
+                            "
+                        >
+
+                            <div
+                                class="
+                                    card-body
+                                    p-4
+                                    d-flex
+                                    flex-column
+                                "
+                            >
+
+                                <!-- LESSON NUMBER -->
+
+                                <div class="mb-3">
+
+                                    <span
+                                        class="
+                                            badge
+                                            bg-primary
+                                            px-3
+                                            py-2
+                                        "
+                                    >
+                                        Lesson {{ lesson[2] }}
+                                    </span>
+
+                                </div>
+
+
+                                <!-- LESSON TITLE -->
+
+                                <h4 class="fw-bold mb-3">
+                                    {{ lesson[1] }}
+                                </h4>
+
+
+                                <!-- DESCRIPTION -->
+
+                                <p class="text-muted mb-4">
+
+                                    Studia questo argomento
+                                    passo dopo passo con
+                                    spiegazioni, esempi ed esercizi.
+
+                                </p>
+
+
+                                <!-- BUTTON -->
+
+                                <div class="mt-auto">
+
+                                    <a
+                                        href="/lessons/{{ lesson[0] }}"
+                                        class="
+                                            btn
+                                            btn-outline-primary
+                                            w-100
+                                        "
+                                    >
+                                        Start Lesson →
+                                    </a>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        </section>
+
+    {% endfor %}
+
+
+    <!-- =====================================================
+         LEARNING MESSAGE
+    ====================================================== -->
+
+    <div
+        class="
+            learning-message
+            text-center
+            rounded-4
+            p-4
+            p-md-5
+            mt-5
+        "
+    >
+
+        <div class="fs-2 mb-3">
+            🚀
+        </div>
+
+        <h3 class="fw-bold">
+            Impara un passo alla volta
+        </h3>
+
+        <p class="text-muted mb-0">
+
+            Completa le lezioni nell'ordine consigliato,
+            prova gli esercizi e verifica ciò che hai
+            imparato attraverso i quiz.
+
+        </p>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,495 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ lesson[1] }} - SOPRO
+{% endblock %}
+
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-9">
+
+            <!-- =====================================================
+                 BACK TO LESSONS
+            ====================================================== -->
+
+            <div class="mb-4">
+
+                <a
+                    href="/lessons"
+                    class="text-decoration-none"
+                >
+                    ← Back to Lessons
+                </a>
+
+            </div>
+
+
+            <!-- =====================================================
+                 LESSON HEADER
+            ====================================================== -->
+
+            <div
+                class="
+                    lesson-header
+                    p-4
+                    p-md-5
+                    mb-5
+                    rounded-4
+                    shadow-sm
+                "
+            >
+
+                <div class="d-flex align-items-center gap-2 mb-3">
+
+                    <span class="badge bg-primary px-3 py-2">
+                        {{ lesson[3] }}
+                    </span>
+
+                    <span class="text-muted">
+                        Lesson {{ lesson[2] }}
+                    </span>
+
+                </div>
+
+                <h1 class="display-5 fw-bold mb-3">
+                    {{ lesson[1] }}
+                </h1>
+
+                <p class="lead text-muted mb-0">
+
+                    Impara il concetto passo dopo passo
+                    attraverso spiegazioni, esempi ed esercizi.
+
+                </p>
+
+            </div>
+
+
+            <!-- =====================================================
+                 LESSON BLOCKS
+            ====================================================== -->
+
+            {% for block in blocks %}
+
+
+                <!-- NORMAL TEXT -->
+
+                {% if block[0] == "text" %}
+
+                    <div class="lesson-text fs-5 mb-4">
+                        {{ block[1] }}
+                    </div>
+
+
+                <!-- EXPLANATION -->
+
+                {% elif block[0] == "explanation" %}
+
+                    <div
+                        class="
+                            lesson-explanation
+                            card
+                            border-0
+                            shadow-sm
+                            rounded-4
+                            mb-4
+                        "
+                    >
+
+                        <div class="card-body p-4">
+
+                            <div class="d-flex align-items-center mb-3">
+
+                                <span class="fs-4 me-2">
+                                    💡
+                                </span>
+
+                                <h5 class="fw-bold mb-0">
+                                    Come funziona
+                                </h5>
+
+                            </div>
+
+                            <div class="lesson-text">
+                                {{ block[1] }}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                <!-- CODE -->
+
+                {% elif block[0] == "code" %}
+
+                    <div class="mb-4">
+
+                        <div
+                            class="
+                                lesson-code
+                                rounded-4
+                                overflow-hidden
+                                shadow-sm
+                            "
+                        >
+
+                            <div
+                                class="
+                                    lesson-code-header
+                                    d-flex
+                                    justify-content-between
+                                    align-items-center
+                                    px-4
+                                    py-2
+                                "
+                            >
+
+                                <span
+                                    class="
+                                        lesson-code-language
+                                        small
+                                        fw-semibold
+                                    "
+                                >
+                                    Python
+                                </span>
+
+                                <span
+                                    class="
+                                        lesson-code-label
+                                        small
+                                    "
+                                >
+                                    CODE
+                                </span>
+
+                            </div>
+
+                            <pre class="p-4 mb-0"><code>{{ block[1] }}</code></pre>
+
+                        </div>
+
+                    </div>
+
+
+                <!-- OUTPUT -->
+
+                {% elif block[0] == "output" %}
+
+                    <div class="mb-4">
+
+                        <div
+                            class="
+                                lesson-output
+                                rounded-4
+                                overflow-hidden
+                                border
+                            "
+                        >
+
+                            <div
+                                class="
+                                    lesson-output-header
+                                    px-4
+                                    py-2
+                                    border-bottom
+                                "
+                            >
+
+                                <span class="fw-semibold small">
+                                    Terminal — Output
+                                </span>
+
+                            </div>
+
+                            <pre class="p-4 mb-0"><code>{{ block[1] }}</code></pre>
+
+                        </div>
+
+                    </div>
+
+
+                <!-- WARNING -->
+
+                {% elif block[0] == "warning" %}
+
+                    <div
+                        class="
+                            alert
+                            alert-warning
+                            border-0
+                            shadow-sm
+                            rounded-4
+                            mb-4
+                            p-4
+                        "
+                    >
+
+                        <div class="d-flex align-items-center mb-2">
+
+                            <span class="fs-4 me-2">
+                                ⚠️
+                            </span>
+
+                            <h5 class="fw-bold mb-0">
+                                Attenzione
+                            </h5>
+
+                        </div>
+
+                        <div class="lesson-text">
+                            {{ block[1] }}
+                        </div>
+
+                    </div>
+
+
+                <!-- EXAMPLE -->
+
+                {% elif block[0] == "example" %}
+
+                    <div
+                        class="
+                            lesson-example
+                            card
+                            border-0
+                            shadow-sm
+                            rounded-4
+                            mb-4
+                        "
+                    >
+
+                        <div class="card-body p-4">
+
+                            <div class="d-flex align-items-center mb-2">
+
+                                <span class="fs-4 me-2">
+                                    📘
+                                </span>
+
+                                <h5 class="fw-bold mb-0">
+                                    Esempio
+                                </h5>
+
+                            </div>
+
+                            <div class="lesson-text">
+                                {{ block[1] }}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                <!-- EXERCISE -->
+
+                {% elif block[0] == "exercise" %}
+
+                    <div
+                        class="
+                            lesson-exercise
+                            card
+                            shadow-sm
+                            rounded-4
+                            mb-4
+                        "
+                    >
+
+                        <div class="card-body p-4">
+
+                            <div
+                                class="
+                                    d-flex
+                                    justify-content-between
+                                    align-items-center
+                                    mb-3
+                                "
+                            >
+
+                                <div class="d-flex align-items-center">
+
+                                    <span class="fs-4 me-2">
+                                        🧠
+                                    </span>
+
+                                    <h5 class="fw-bold mb-0">
+                                        Prova tu
+                                    </h5>
+
+                                </div>
+
+                                <span class="badge bg-success">
+                                    EXERCISE
+                                </span>
+
+                            </div>
+
+                            <div class="lesson-text">
+                                {{ block[1] }}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                <!-- FALLBACK -->
+
+                {% else %}
+
+                    <div class="lesson-text mb-4">
+                        {{ block[1] }}
+                    </div>
+
+                {% endif %}
+
+            {% endfor %}
+
+
+            <!-- =====================================================
+                 END OF LESSON
+            ====================================================== -->
+
+            <div class="mt-5 pt-4">
+
+                <div
+                    class="
+                        lesson-complete
+                        card
+                        border-0
+                        shadow-sm
+                        rounded-4
+                        overflow-hidden
+                    "
+                >
+
+                    <div class="card-body p-4 p-md-5 text-center">
+
+                        <div class="fs-1 mb-3">
+                            🎯
+                        </div>
+
+                        <h2 class="fw-bold mb-3">
+                            Hai completato questa lezione!
+                        </h2>
+
+                        <p class="text-muted fs-5 mb-4">
+
+                            Metti alla prova quello che hai imparato
+                            con alcune domande sul topic
+
+                            <strong>
+                                {{ lesson[3] }}
+                            </strong>.
+
+                        </p>
+
+                        <a
+                            href="/quiz/difficulty?topic={{ lesson[4] }}"
+                            class="btn btn-primary btn-lg px-4"
+                        >
+                            🧠 Test your knowledge
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =====================================================
+                 PREVIOUS / NEXT LESSON
+            ====================================================== -->
+
+            <div
+                class="
+                    d-flex
+                    justify-content-between
+                    align-items-stretch
+                    gap-3
+                    mt-5
+                "
+            >
+
+                <!-- PREVIOUS -->
+
+                <div class="flex-fill">
+
+                    {% if previous_lesson %}
+
+                        <a
+                            href="/lessons/{{ previous_lesson[0] }}"
+                            class="
+                                btn
+                                btn-outline-secondary
+                                w-100
+                                h-100
+                                p-3
+                                text-start
+                            "
+                        >
+
+                            <small class="d-block text-muted mb-1">
+                                ← Previous lesson
+                            </small>
+
+                            <strong>
+                                {{ previous_lesson[1] }}
+                            </strong>
+
+                        </a>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- NEXT -->
+
+                <div class="flex-fill">
+
+                    {% if next_lesson %}
+
+                        <a
+                            href="/lessons/{{ next_lesson[0] }}"
+                            class="
+                                btn
+                                btn-primary
+                                w-100
+                                h-100
+                                p-3
+                                text-end
+                            "
+                        >
+
+                            <small class="d-block mb-1 opacity-75">
+                                Next lesson →
+                            </small>
+
+                            <strong>
+                                {{ next_lesson[1] }}
+                            </strong>
+
+                        </a>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

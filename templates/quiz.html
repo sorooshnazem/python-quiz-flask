@@ -1,71 +1,499 @@
 {% extends "base.html" %}
 
 {% block title %}
-Quiz
+Python Quiz - SOPRO
 {% endblock %}
+
 
 {% block content %}
 
-<h1>Python Quiz</h1>
+<div class="container py-5">
 
-<h3>Current Score: {{ score }}</h3>
+    <div class="row justify-content-center">
 
-{% if message %}
-    <p>{{ message }}</p>
-{% endif %}
+        <div class="col-lg-8">
 
-<h2>{{ question[1] }}</h2>
 
-<form method="POST">
+            <!-- =====================================================
+                 QUIZ HEADER
+            ====================================================== -->
 
-    <input
-        type="hidden"
-        name="question_id"
-        value="{{ question[0] }}"
-    >
+            <div class="text-center mb-5">
 
-    {% if selected_topic %}
+                <span class="badge bg-primary px-3 py-2 mb-3">
+                    PYTHON QUIZ
+                </span>
 
-        <input
-            type="hidden"
-            name="topic"
-            value="{{ selected_topic }}"
-        >
+                <h1 class="fw-bold mb-3">
+                    Test your knowledge
+                </h1>
 
-    {% endif %}
+                <p class="text-muted fs-5">
+                    Scegli la risposta corretta
+                    e verifica quello che hai imparato.
+                </p>
 
-    {% if selected_difficulty %}
+            </div>
 
-        <input
-            type="hidden"
-            name="difficulty"
-            value="{{ selected_difficulty }}"
-        >
 
-    {% endif %}
+            <!-- =====================================================
+                 QUIZ INFORMATION
+            ====================================================== -->
 
-    <input type="radio" name="answer" value="{{ question[2] }}" required>
-    {{ question[2] }}
+            <div class="row g-3 mb-4">
 
-    <br><br>
+                <!-- SCORE -->
 
-    <input type="radio" name="answer" value="{{ question[3] }}" required>
-    {{ question[3] }}
+                <div class="col-md-4">
 
-    <br><br>
+                    <div
+                        class="
+                            quiz-info-card
+                            text-center
+                            rounded-4
+                            p-3
+                            h-100
+                        "
+                    >
 
-    <input type="radio" name="answer" value="{{ question[4] }}" required>
-    {{ question[4] }}
+                        <div class="text-muted small mb-1">
+                            SCORE
+                        </div>
 
-    <br><br>
+                        <div class="fs-4 fw-bold">
+                            ⭐ {{ score }}
+                        </div>
 
-    <input type="radio" name="answer" value="{{ question[5] }}" required>
-    {{ question[5] }}
+                    </div>
 
-    <br><br>
+                </div>
 
-    <button type="submit">Submit Answer</button>
 
-</form>
+                <!-- TOPIC -->
+
+                <div class="col-md-4">
+
+                    <div
+                        class="
+                            quiz-info-card
+                            text-center
+                            rounded-4
+                            p-3
+                            h-100
+                        "
+                    >
+
+                        <div class="text-muted small mb-1">
+                            TOPIC
+                        </div>
+
+                        <div class="fw-bold">
+
+                            {% if selected_topic %}
+                                {{ selected_topic }}
+                            {% else %}
+                                Python
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DIFFICULTY -->
+
+                <div class="col-md-4">
+
+                    <div
+                        class="
+                            quiz-info-card
+                            text-center
+                            rounded-4
+                            p-3
+                            h-100
+                        "
+                    >
+
+                        <div class="text-muted small mb-1">
+                            DIFFICULTY
+                        </div>
+
+                        <div class="fw-bold">
+
+                            {% if selected_difficulty %}
+                                {{ selected_difficulty }}
+                            {% else %}
+                                All
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =====================================================
+                 RESULT MESSAGE
+            ====================================================== -->
+
+            {% if answered %}
+
+                {% if is_correct %}
+
+                    <div
+                        class="
+                            alert
+                            alert-success
+                            border-0
+                            shadow-sm
+                            rounded-4
+                            p-4
+                            mb-4
+                        "
+                    >
+
+                        <h5 class="fw-bold mb-2">
+                            ✓ Correct! +10 points
+                        </h5>
+
+                        <div>
+                            La tua risposta:
+                            <strong>
+                                {{ selected_answer }}
+                            </strong>
+                        </div>
+
+                    </div>
+
+                {% else %}
+
+                    <div
+                        class="
+                            alert
+                            alert-danger
+                            border-0
+                            shadow-sm
+                            rounded-4
+                            p-4
+                            mb-4
+                        "
+                    >
+
+                        <h5 class="fw-bold mb-3">
+                            ✕ Wrong answer
+                        </h5>
+
+                        <div class="mb-2">
+
+                            La tua risposta:
+
+                            <strong>
+                                {{ selected_answer }}
+                            </strong>
+
+                        </div>
+
+                        <div>
+
+                            Risposta corretta:
+
+                            <strong>
+                                {{ correct_answer }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+            {% endif %}
+
+
+            <!-- =====================================================
+                 QUESTION CARD
+            ====================================================== -->
+
+            <div
+                class="
+                    quiz-question-card
+                    card
+                    border-0
+                    shadow-sm
+                    rounded-4
+                "
+            >
+
+                <div class="card-body p-4 p-md-5">
+
+                    <div class="text-muted small fw-semibold mb-2">
+                        QUESTION
+                    </div>
+
+                    <h2 class="fw-bold mb-4">
+                        {{ question[1] }}
+                    </h2>
+
+
+                    <!-- =================================================
+                         QUESTION NOT ANSWERED
+                    ================================================== -->
+
+                    {% if not answered %}
+
+                        <form method="POST">
+
+
+                            <!-- QUESTION ID -->
+
+                            <input
+                                type="hidden"
+                                name="question_id"
+                                value="{{ question[0] }}"
+                            >
+
+
+                            <!-- KEEP TOPIC -->
+
+                            {% if selected_topic %}
+
+                                <input
+                                    type="hidden"
+                                    name="topic"
+                                    value="{{ selected_topic }}"
+                                >
+
+                            {% endif %}
+
+
+                            <!-- KEEP DIFFICULTY -->
+
+                            {% if selected_difficulty %}
+
+                                <input
+                                    type="hidden"
+                                    name="difficulty"
+                                    value="{{ selected_difficulty }}"
+                                >
+
+                            {% endif %}
+
+
+                            <!-- =========================================
+                                 OPTION A
+                            ========================================== -->
+
+                            <label class="quiz-option mb-3">
+
+                                <input
+                                    type="radio"
+                                    name="answer"
+                                    value="{{ question[2] }}"
+                                    required
+                                >
+
+                                <span class="quiz-option-letter">
+                                    A
+                                </span>
+
+                                <span>
+                                    {{ question[2] }}
+                                </span>
+
+                            </label>
+
+
+                            <!-- =========================================
+                                 OPTION B
+                            ========================================== -->
+
+                            <label class="quiz-option mb-3">
+
+                                <input
+                                    type="radio"
+                                    name="answer"
+                                    value="{{ question[3] }}"
+                                    required
+                                >
+
+                                <span class="quiz-option-letter">
+                                    B
+                                </span>
+
+                                <span>
+                                    {{ question[3] }}
+                                </span>
+
+                            </label>
+
+
+                            <!-- =========================================
+                                 OPTION C
+                            ========================================== -->
+
+                            <label class="quiz-option mb-3">
+
+                                <input
+                                    type="radio"
+                                    name="answer"
+                                    value="{{ question[4] }}"
+                                    required
+                                >
+
+                                <span class="quiz-option-letter">
+                                    C
+                                </span>
+
+                                <span>
+                                    {{ question[4] }}
+                                </span>
+
+                            </label>
+
+
+                            <!-- =========================================
+                                 OPTION D
+                            ========================================== -->
+
+                            <label class="quiz-option mb-4">
+
+                                <input
+                                    type="radio"
+                                    name="answer"
+                                    value="{{ question[5] }}"
+                                    required
+                                >
+
+                                <span class="quiz-option-letter">
+                                    D
+                                </span>
+
+                                <span>
+                                    {{ question[5] }}
+                                </span>
+
+                            </label>
+
+
+                            <!-- =========================================
+                                 SUBMIT ANSWER
+                            ========================================== -->
+
+                            <button
+                                type="submit"
+                                class="
+                                    btn
+                                    btn-primary
+                                    btn-lg
+                                    w-100
+                                    mt-2
+                                "
+                            >
+                                Submit Answer →
+                            </button>
+
+                        </form>
+
+
+                    <!-- =================================================
+                         QUESTION ALREADY ANSWERED
+                    ================================================== -->
+
+                    {% else %}
+
+
+                        <!-- USER ANSWER -->
+
+                        <div class="mb-4">
+
+                            <div class="text-muted small mb-1">
+                                YOUR ANSWER
+                            </div>
+
+                            <div class="fs-5 fw-semibold">
+                                {{ selected_answer }}
+                            </div>
+
+                        </div>
+
+
+                        <!-- CORRECT ANSWER -->
+
+                        <div class="mb-4">
+
+                            <div class="text-muted small mb-1">
+                                CORRECT ANSWER
+                            </div>
+
+                            <div class="fs-5 fw-semibold text-success">
+                                {{ correct_answer }}
+                            </div>
+
+                        </div>
+
+
+                        <!-- =============================================
+                             NEXT QUESTION
+                        ============================================== -->
+
+                        <a
+                            href="/quiz{% if selected_topic or selected_difficulty %}?{% endif %}{% if selected_topic %}topic={{ selected_topic }}{% endif %}{% if selected_topic and selected_difficulty %}&{% endif %}{% if selected_difficulty %}difficulty={{ selected_difficulty }}{% endif %}"
+                            class="
+                                btn
+                                btn-primary
+                                btn-lg
+                                w-100
+                                mt-2
+                            "
+                        >
+                            Next Question →
+                        </a>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <!-- =====================================================
+                 BOTTOM NAVIGATION
+            ====================================================== -->
+
+            <div
+                class="
+                    d-flex
+                    justify-content-between
+                    align-items-center
+                    mt-4
+                "
+            >
+
+                <a
+                    href="/lessons"
+                    class="text-decoration-none"
+                >
+                    ← Back to Lessons
+                </a>
+
+                <a
+                    href="/ranking"
+                    class="text-decoration-none"
+                >
+                    View Ranking →
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
 {% endblock %}

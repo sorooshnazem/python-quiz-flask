@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}
+Quiz Not Available
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-7">
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-body p-5 text-center">
+
+                    <div
+                        class="mb-4"
+                        style="font-size: 4rem;"
+                    >
+                        📚
+                    </div>
+
+                    <h1 class="fw-bold mb-3">
+                        Quiz non ancora disponibile
+                    </h1>
+
+                    <p class="text-muted fs-5 mb-4">
+
+                        Non ci sono ancora domande disponibili
+                        per questa combinazione di topic
+                        e difficoltà.
+
+                    </p>
+
+
+                    {% if selected_difficulty %}
+
+                        <p class="mb-4">
+
+                            Difficulty:
+
+                            <span class="badge bg-primary">
+                                {{ selected_difficulty }}
+                            </span>
+
+                        </p>
+
+                    {% endif %}
+
+
+                    <div class="d-flex justify-content-center gap-2">
+
+                        {% if selected_topic %}
+
+                            <a
+                                href="/quiz/difficulty?topic={{ selected_topic }}"
+                                class="btn btn-primary"
+                            >
+                                Choose another difficulty
+                            </a>
+
+                        {% endif %}
+
+
+                        <a
+                            href="/quiz/topics"
+                            class="btn btn-outline-secondary"
+                        >
+                            Choose another topic
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

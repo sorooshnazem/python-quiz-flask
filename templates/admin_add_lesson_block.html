@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+
+{% block title %}
+Add Lesson Block
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="mb-4">
+
+                <a
+                    href="/admin/lessons/{{ lesson[0] }}/blocks"
+                    class="text-decoration-none"
+                >
+                    ← Back to Blocks
+                </a>
+
+            </div>
+
+
+            <div class="card border-0 shadow-sm">
+
+                <div class="card-body p-5">
+
+                    <h1 class="fw-bold mb-2">
+                        Add Block
+                    </h1>
+
+                    <p class="text-muted mb-4">
+                        Lesson: {{ lesson[1] }}
+                    </p>
+
+
+                    {% if error %}
+
+                    <div class="alert alert-danger">
+                        {{ error }}
+                    </div>
+
+                    {% endif %}
+
+
+                    <form method="POST">
+
+
+                        <!-- BLOCK TYPE -->
+
+                        <div class="mb-4">
+
+                            <label
+                                for="block_type"
+                                class="form-label fw-bold"
+                            >
+                                Block Type
+                            </label>
+
+                            <select
+                                class="form-select"
+                                id="block_type"
+                                name="block_type"
+                                required
+                            >
+
+                                <option value="">
+                                    Select block type
+                                </option>
+
+                                <option value="text">
+                                    Text
+                                </option>
+
+                                <option value="code">
+                                    Code
+                                </option>
+
+                                <option value="output">
+                                    Output
+                                </option>
+
+                                <option value="explanation">
+                                    Explanation
+                                </option>
+
+                                <option value="warning">
+                                    Warning
+                                </option>
+
+                                <option value="example">
+                                    Example
+                                </option>
+
+                                <option value="exercise">
+                                    Exercise
+                                </option>
+
+                                <option value="note">
+                                    Note
+                                </option>
+
+                                <option value="diagram">
+                                    Diagram
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- CONTENT -->
+
+                        <div class="mb-4">
+
+                            <label
+                                for="content"
+                                class="form-label fw-bold"
+                            >
+                                Content
+                            </label>
+
+                            <textarea
+                                class="form-control"
+                                id="content"
+                                name="content"
+                                rows="10"
+                                placeholder="Scrivi qui il contenuto del blocco..."
+                                required
+                            ></textarea>
+
+                        </div>
+
+
+                        <!-- ORDER -->
+
+                        <div class="mb-4">
+
+                            <label
+                                for="block_order"
+                                class="form-label fw-bold"
+                            >
+                                Block Order
+                            </label>
+
+                            <input
+                                type="number"
+                                class="form-control"
+                                id="block_order"
+                                name="block_order"
+                                min="1"
+                                value="{{ next_order }}"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- SAVE -->
+
+                        <div class="d-grid">
+
+                            <button
+                                type="submit"
+                                class="btn btn-success btn-lg"
+                            >
+                                Add Block
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

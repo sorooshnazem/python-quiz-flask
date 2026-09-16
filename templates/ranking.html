@@ -1,29 +1,214 @@
 {% extends "base.html" %}
 
 {% block title %}
-Ranking
+Ranking - SOPRO
 {% endblock %}
+
 
 {% block content %}
 
-<h1>Ranking</h1>
+<div class="container py-5">
 
-<table border="1">
+    <div class="row justify-content-center">
 
-    <tr>
-        <th>Nickname</th>
-        <th>Score</th>
-    </tr>
+        <div class="col-lg-9">
 
-    {% for user in users %}
 
-        <tr>
-            <td>{{ user[0] }}</td>
-            <td>{{ user[1] }}</td>
-        </tr>
+            <!-- =====================================================
+                 HEADER
+            ====================================================== -->
 
-    {% endfor %}
+            <div class="text-center mb-5">
 
-</table>
+                <div class="fs-1 mb-3">
+                    🏆
+                </div>
+
+                <h1 class="display-5 fw-bold mb-3">
+                    Python Ranking
+                </h1>
+
+                <p class="text-muted fs-5">
+                    Confronta il tuo punteggio con quello
+                    degli altri studenti.
+                </p>
+
+            </div>
+
+
+            <!-- =====================================================
+                 RANKING CARD
+            ====================================================== -->
+
+            <div
+                class="
+                    ranking-card
+                    card
+                    border-0
+                    shadow-sm
+                    rounded-4
+                    overflow-hidden
+                "
+            >
+
+                <div class="table-responsive">
+
+                    <table
+                        class="
+                            table
+                            table-hover
+                            align-middle
+                            mb-0
+                        "
+                    >
+
+                        <!-- TABLE HEADER -->
+
+                        <thead class="ranking-table-header">
+
+                            <tr>
+
+                                <th class="py-3 px-4">
+                                    Rank
+                                </th>
+
+                                <th class="py-3 px-4">
+                                    Student
+                                </th>
+
+                                <th class="py-3 px-4 text-end">
+                                    Score
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <!-- TABLE BODY -->
+
+                        <tbody>
+
+                            {% for user in users %}
+
+                                <tr>
+
+                                    <!-- RANK -->
+
+                                    <td class="py-3 px-4">
+
+                                        {% if loop.index == 1 %}
+
+                                            <span class="fs-4">
+                                                🥇
+                                            </span>
+
+                                        {% elif loop.index == 2 %}
+
+                                            <span class="fs-4">
+                                                🥈
+                                            </span>
+
+                                        {% elif loop.index == 3 %}
+
+                                            <span class="fs-4">
+                                                🥉
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="fw-semibold text-muted">
+                                                #{{ loop.index }}
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <!-- STUDENT -->
+
+                                    <td class="py-3 px-4">
+
+                                        <div class="d-flex align-items-center">
+
+                                            <div class="ranking-avatar me-3">
+
+                                                {{ user[0][0]|upper }}
+
+                                            </div>
+
+                                            <div class="fw-semibold">
+                                                {{ user[0] }}
+                                            </div>
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <!-- SCORE -->
+
+                                    <td
+                                        class="
+                                            py-3
+                                            px-4
+                                            text-end
+                                            fw-bold
+                                        "
+                                    >
+                                        ⭐ {{ user[1] }}
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            <!-- =====================================================
+                 ACTIONS
+            ====================================================== -->
+
+            <div class="text-center mt-5">
+
+                <p class="text-muted mb-3">
+                    Vuoi migliorare il tuo punteggio?
+                </p>
+
+                <a
+                    href="/quiz"
+                    class="btn btn-primary btn-lg px-4"
+                >
+                    🧠 Take a Quiz
+                </a>
+
+                <a
+                    href="/lessons"
+                    class="
+                        btn
+                        btn-outline-secondary
+                        btn-lg
+                        px-4
+                        ms-2
+                    "
+                >
+                    📚 Lessons
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
 {% endblock %}
