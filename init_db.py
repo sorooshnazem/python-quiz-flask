@@ -1,9 +1,9 @@
-import sqlite3
+from db import get_db_connection
 
 
 def init_db():
 
-    connection = sqlite3.connect("database.db")
+    connection = get_db_connection()
     cursor = connection.cursor()
 
     # =========================================================

@@ -1,4 +1,4 @@
-import sqlite3
+from db import get_db_connection
 from data.lessons_basics import (
     INTRODUCTION_BLOCKS,
     PRINT_BLOCKS,
@@ -97,10 +97,10 @@ def seed_lesson_blocks(
                 block_id
             ))
 
-            
+
 def seed_data():
 
-    connection = sqlite3.connect("database.db")
+    connection = get_db_connection()
     cursor = connection.cursor()
 
     cursor.execute("PRAGMA foreign_keys = ON")

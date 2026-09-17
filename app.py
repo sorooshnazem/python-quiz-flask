@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, session, redirect
 import sqlite3
+from db import get_db_connection
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 from functools import wraps
@@ -7,7 +8,9 @@ from dotenv import load_dotenv
 from init_db import init_db
 from seed_data import seed_data
 
-load_dotenv()
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+load_dotenv(os.path.join(BASE_DIR, ".env"))
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
@@ -75,7 +78,7 @@ def login():
         # FIND USER
         # ---------------------------------------------------------
 
-        connection = sqlite3.connect("database.db")
+        connection = get_db_connection()
         cursor = connection.cursor()
 
         cursor.execute("""
@@ -250,7 +253,7 @@ def register():
         # 6. DATABASE
         # ---------------------------------------------------------
 
-        connection = sqlite3.connect("database.db")
+        connection = get_db_connection()
         cursor = connection.cursor()
 
         try:
@@ -332,7 +335,7 @@ def quiz():
     if selected_difficulty in ("", "None", None):
         selected_difficulty = None
 
-    connection = sqlite3.connect("database.db")
+    connection = get_db_connection()
     cursor = connection.cursor()
 
     user_id = session["user_id"]
@@ -552,7 +555,7 @@ def quiz():
 @app.route("/ranking")
 def ranking():
 
-    connection = sqlite3.connect("database.db")
+    connection = get_db_connection()
     cursor = connection.cursor()
 
     cursor.execute("""
@@ -686,7 +689,7 @@ def admin():
 
             correct_answer = options[correct_option]
 
-            connection = sqlite3.connect("database.db")
+            connection = get_db_connection()
             cursor = connection.cursor()
 
             # -----------------------------------------------------
@@ -774,7 +777,7 @@ def admin():
     # RECUPERA I TOPIC PYTHON
     # -----------------------------------
 
-    connection = sqlite3.connect("database.db")
+    connection = get_db_connection()
     cursor = connection.cursor()
 
     cursor.execute("""
@@ -914,7 +917,7 @@ def admin():
 @admin_required
 def delete_question(question_id):
 
-    connection = sqlite3.connect("database.db")
+    connection = get_db_connection()
     cursor = connection.cursor()
 
     cursor.execute("""
@@ -934,7 +937,7 @@ def delete_question(question_id):
 @admin_required
 def edit_question(question_id):
 
-    connection = sqlite3.connect("database.db")
+    connection = get_db_connection()
     cursor = connection.cursor()
 
     if request.method == "POST":
@@ -1029,7 +1032,7 @@ def quiz_topics():
     if "user_id" not in session:
         return redirect("/login")
 
-    connection = sqlite3.connect("database.db")
+    connection = get_db_connection()
     cursor = connection.cursor()
 
     cursor.execute("""
@@ -1076,7 +1079,7 @@ def lessons():
             return redirect("/login")
     '''
 
-    connection = sqlite3.connect("database.db")
+    connection = get_db_connection()
     cursor = connection.cursor()
 
     cursor.execute("""
@@ -1121,7 +1124,7 @@ def lesson_detail(lesson_id):
         return redirect("/login")
     '''
 
-    connection = sqlite3.connect("database.db")
+    connection = get_db_connection()
     cursor = connection.cursor()
 
     # ---------------------------------------------------------
@@ -1225,7 +1228,7 @@ def lesson_detail(lesson_id):
 @admin_required
 def admin_lessons():
 
-    connection = sqlite3.connect("database.db")
+    connection = get_db_connection()
     cursor = connection.cursor()
 
     cursor.execute("""
@@ -1255,7 +1258,7 @@ def admin_lessons():
 @admin_required
 def admin_add_lesson():
 
-    connection = sqlite3.connect("database.db")
+    connection = get_db_connection()
     cursor = connection.cursor()
 
     # ---------------------------------------------------------
@@ -1441,7 +1444,7 @@ def admin_add_lesson():
 @admin_required
 def admin_edit_lesson(lesson_id):
 
-    connection = sqlite3.connect("database.db")
+    connection = get_db_connection()
     cursor = connection.cursor()
 
     # ---------------------------------------------------------
@@ -1676,7 +1679,7 @@ def admin_edit_lesson(lesson_id):
 @admin_required
 def admin_delete_lesson(lesson_id):
 
-    connection = sqlite3.connect("database.db")
+    connection = get_db_connection()
     cursor = connection.cursor()
 
     cursor.execute("PRAGMA foreign_keys = ON")
@@ -1733,7 +1736,7 @@ def admin_delete_lesson(lesson_id):
 @admin_required
 def admin_lesson_blocks(lesson_id):
 
-    connection = sqlite3.connect("database.db")
+    connection = get_db_connection()
     cursor = connection.cursor()
 
     # Get lesson
@@ -1784,7 +1787,7 @@ def admin_lesson_blocks(lesson_id):
 @admin_required
 def admin_add_lesson_block(lesson_id):
 
-    connection = sqlite3.connect("database.db")
+    connection = get_db_connection()
     cursor = connection.cursor()
 
     # ---------------------------------------------------------
@@ -1977,7 +1980,7 @@ def admin_add_lesson_block(lesson_id):
 @admin_required
 def admin_edit_lesson_block(lesson_id, block_id):
 
-    connection = sqlite3.connect("database.db")
+    connection = get_db_connection()
     cursor = connection.cursor()
 
     # ---------------------------------------------------------
@@ -2203,7 +2206,7 @@ def admin_edit_lesson_block(lesson_id, block_id):
 @admin_required
 def admin_delete_lesson_block(lesson_id, block_id):
 
-    connection = sqlite3.connect("database.db")
+    connection = get_db_connection()
     cursor = connection.cursor()
 
     cursor.execute("""
