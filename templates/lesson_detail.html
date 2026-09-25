@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-{{ lesson[1] }} - SOPRO
+{{ lesson[1] }} - SOPROG
 {% endblock %}
 
 
@@ -56,14 +56,16 @@
 
                 </div>
 
+
                 <h1 class="display-5 fw-bold mb-3">
                     {{ lesson[1] }}
                 </h1>
 
+
                 <p class="lead text-muted mb-0">
 
-                    Impara il concetto passo dopo passo
-                    attraverso spiegazioni, esempi ed esercizi.
+                    Learn this concept step by step
+                    through explanations, examples and exercises.
 
                 </p>
 
@@ -77,7 +79,9 @@
             {% for block in blocks %}
 
 
-                <!-- NORMAL TEXT -->
+                <!-- =================================================
+                     NORMAL TEXT
+                ================================================== -->
 
                 {% if block[0] == "text" %}
 
@@ -86,7 +90,9 @@
                     </div>
 
 
-                <!-- EXPLANATION -->
+                <!-- =================================================
+                     EXPLANATION
+                ================================================== -->
 
                 {% elif block[0] == "explanation" %}
 
@@ -110,7 +116,7 @@
                                 </span>
 
                                 <h5 class="fw-bold mb-0">
-                                    Come funziona
+                                    How it works
                                 </h5>
 
                             </div>
@@ -124,7 +130,9 @@
                     </div>
 
 
-                <!-- CODE -->
+                <!-- =================================================
+                     CODE
+                ================================================== -->
 
                 {% elif block[0] == "code" %}
 
@@ -178,7 +186,9 @@
                     </div>
 
 
-                <!-- OUTPUT -->
+                <!-- =================================================
+                     OUTPUT
+                ================================================== -->
 
                 {% elif block[0] == "output" %}
 
@@ -215,7 +225,9 @@
                     </div>
 
 
-                <!-- WARNING -->
+                <!-- =================================================
+                     WARNING
+                ================================================== -->
 
                 {% elif block[0] == "warning" %}
 
@@ -238,7 +250,7 @@
                             </span>
 
                             <h5 class="fw-bold mb-0">
-                                Attenzione
+                                Warning
                             </h5>
 
                         </div>
@@ -250,7 +262,9 @@
                     </div>
 
 
-                <!-- EXAMPLE -->
+                <!-- =================================================
+                     EXAMPLE
+                ================================================== -->
 
                 {% elif block[0] == "example" %}
 
@@ -274,7 +288,7 @@
                                 </span>
 
                                 <h5 class="fw-bold mb-0">
-                                    Esempio
+                                    Example
                                 </h5>
 
                             </div>
@@ -288,9 +302,13 @@
                     </div>
 
 
-                <!-- EXERCISE -->
+                <!-- =================================================
+                     EXERCISE
+                ================================================== -->
 
                 {% elif block[0] == "exercise" %}
+
+                    {% set exercise_parts = block[1].split('---ANSWER---') %}
 
                     <div
                         class="
@@ -303,6 +321,8 @@
                     >
 
                         <div class="card-body p-4">
+
+                            <!-- EXERCISE HEADER -->
 
                             <div
                                 class="
@@ -320,7 +340,7 @@
                                     </span>
 
                                     <h5 class="fw-bold mb-0">
-                                        Prova tu
+                                        Try it yourself
                                     </h5>
 
                                 </div>
@@ -331,16 +351,100 @@
 
                             </div>
 
-                            <div class="lesson-text">
-                                {{ block[1] }}
+
+                            <!-- EXERCISE QUESTION -->
+
+                            <div class="lesson-text mb-4">
+                                {{ exercise_parts[0] }}
                             </div>
+
+
+                            <!-- ANSWER -->
+
+                            {% if exercise_parts|length > 1 %}
+
+                                <button
+                                    class="btn btn-outline-success"
+                                    type="button"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#answer-{{ loop.index }}"
+                                    aria-expanded="false"
+                                    aria-controls="answer-{{ loop.index }}"
+                                >
+                                    👀 Show answer
+                                </button>
+
+
+                                <div
+                                    class="collapse mt-3"
+                                    id="answer-{{ loop.index }}"
+                                >
+
+                                    <div class="mt-3">
+
+                                        <div class="fw-bold mb-2">
+                                            💡 Solution
+                                        </div>
+
+                                        <div
+                                            class="
+                                                lesson-code
+                                                rounded-4
+                                                overflow-hidden
+                                                shadow-sm
+                                            "
+                                        >
+
+                                            <div
+                                                class="
+                                                    lesson-code-header
+                                                    d-flex
+                                                    justify-content-between
+                                                    align-items-center
+                                                    px-4
+                                                    py-2
+                                                "
+                                            >
+
+                                                <span
+                                                    class="
+                                                        lesson-code-language
+                                                        small
+                                                        fw-semibold
+                                                    "
+                                                >
+                                                    Python
+                                                </span>
+
+                                                <span
+                                                    class="
+                                                        lesson-code-label
+                                                        small
+                                                    "
+                                                >
+                                                    SOLUTION
+                                                </span>
+
+                                            </div>
+
+                                            <pre class="p-4 mb-0"><code>{{ exercise_parts[1] | trim }}</code></pre>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            {% endif %}
 
                         </div>
 
                     </div>
 
 
-                <!-- FALLBACK -->
+                <!-- =================================================
+                     FALLBACK
+                ================================================== -->
 
                 {% else %}
 
@@ -377,13 +481,13 @@
                         </div>
 
                         <h2 class="fw-bold mb-3">
-                            Hai completato questa lezione!
+                            You completed this lesson!
                         </h2>
 
                         <p class="text-muted fs-5 mb-4">
 
-                            Metti alla prova quello che hai imparato
-                            con alcune domande sul topic
+                            Test what you have learned
+                            with some questions about
 
                             <strong>
                                 {{ lesson[3] }}
