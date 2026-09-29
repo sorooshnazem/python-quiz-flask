@@ -1862,7 +1862,8 @@ def admin_add_lesson_block(lesson_id):
             "output",
             "warning",
             "example",
-            "exercise"
+            "exercise",
+            "table"
         )
 
         if block_type not in valid_block_types:
@@ -2080,7 +2081,8 @@ def admin_edit_lesson_block(lesson_id, block_id):
             "output",
             "warning",
             "example",
-            "exercise"
+            "exercise",
+            "table"
         )
 
         if block_type not in valid_block_types:

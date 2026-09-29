@@ -300,6 +300,80 @@
                         </div>
 
                     </div>
+                <!-- =================================================
+                     TABLE
+                ================================================== -->
+
+                {% elif block[0] == "table" %}
+
+                    {% set rows = block[1].splitlines() %}
+
+                    <div class="table-responsive mb-4">
+
+                        <table
+                            class="
+                                table
+                                table-bordered
+                                table-hover
+                                align-middle
+                                shadow-sm
+                            "
+                        >
+
+                            {% for row in rows %}
+
+                                {% set clean_row = row.strip().strip('|') %}
+                                {% set cells = clean_row.split('|') %}
+
+                                {% set row_without_separators = clean_row
+                                    | replace('|', '')
+                                    | replace('-', '')
+                                    | replace(':', '')
+                                    | trim
+                                %}
+
+                                {% if row_without_separators != '' %}
+
+                                    {% if loop.first %}
+
+                                        <thead class="table-light">
+                                            <tr>
+
+                                                {% for cell in cells %}
+                                                    <th scope="col">
+                                                        {{ cell | trim }}
+                                                    </th>
+                                                {% endfor %}
+
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+
+                                    {% else %}
+
+                                        <tr>
+
+                                            {% for cell in cells %}
+                                                <td>
+                                                    {{ cell | trim }}
+                                                </td>
+                                            {% endfor %}
+
+                                        </tr>
+
+                                    {% endif %}
+
+                                {% endif %}
+
+                            {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
 
 
                 <!-- =================================================

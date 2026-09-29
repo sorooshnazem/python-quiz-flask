@@ -117,6 +117,13 @@ Edit Lesson Block
                                 </option>
 
                                 <option
+                                    value="table"
+                                    {% if block[1] == "table" %}selected{% endif %}
+                                >
+                                    Table
+                                </option>
+
+                                <option
                                     value="note"
                                     {% if block[1] == "note" %}selected{% endif %}
                                 >
@@ -131,6 +138,23 @@ Edit Lesson Block
                                 </option>
 
                             </select>
+
+                            <div
+                                id="table-help"
+                                class="alert alert-info mt-3 d-none"
+                            >
+                                <strong>Table format</strong>
+
+                                <p class="mb-2">
+                                    Use Markdown table syntax.
+                                    The first row will be used as the table header.
+                                </p>
+
+                                <pre class="mb-0">| Operator | Description | Example |
+                                | --- | --- | --- |
+                                | + | Addition | 5 + 2 |
+                                | - | Subtraction | 5 - 2 |</pre>
+                            </div>
 
                         </div>
 
@@ -203,5 +227,24 @@ Edit Lesson Block
     </div>
 
 </div>
+
+<script>
+    const blockTypeSelect = document.getElementById("block_type");
+    const tableHelp = document.getElementById("table-help");
+
+    function updateTableHelp() {
+
+        if (blockTypeSelect.value === "table") {
+            tableHelp.classList.remove("d-none");
+        } else {
+            tableHelp.classList.add("d-none");
+        }
+
+    }
+
+    blockTypeSelect.addEventListener("change", updateTableHelp);
+
+    updateTableHelp();
+</script>
 
 {% endblock %}
