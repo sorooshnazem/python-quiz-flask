@@ -24,6 +24,68 @@ Bulk Add Lesson Blocks
 
     {% endif %}
 
+    <div class="alert alert-info mb-4">
+
+        <strong>Available block types:</strong>
+
+        <code>[text]</code>,
+        <code>[explanation]</code>,
+        <code>[code]</code>,
+        <code>[output]</code>,
+        <code>[warning]</code>,
+        <code>[example]</code>,
+        <code>[exercise]</code>,
+        <code>[table]</code>
+
+    </div>
+
+    <div class="card mb-4">
+
+        <div class="card-body">
+
+            <h5 class="card-title">
+                Example
+            </h5>
+
+            <pre class="mb-0">[text]
+Introduction to variables.
+
+[explanation]
+A variable stores a value.
+
+[code]
+name = "SOPROG"
+print(name)
+
+[output]
+SOPROG</pre>
+
+            <p class="mt-4 mb-2">
+                <strong>Table example:</strong>
+            </p>
+
+            <pre class="mb-0">[table]
+| Operator | Description | Example |
+| --- | --- | --- |
+| + | Addition | 5 + 2 |
+| - | Subtraction | 5 - 2 |
+| * | Multiplication | 5 * 2 |</pre>
+
+            <p class="mt-4 mb-2">
+                <strong>Exercise with hidden answer:</strong>
+            </p>
+
+            <pre class="mb-0">[exercise]
+Create a variable called age and assign the value 25.
+
+---ANSWER---
+
+age = 25</pre>
+
+        </div>
+
+    </div>
+
     <form method="POST">
 
         <div class="mb-3">
