@@ -1781,6 +1781,176 @@ def admin_lesson_blocks(lesson_id):
     )
 
 @app.route(
+    "/admin/lessons/<int:lesson_id>/blocks/bulk-add",
+    methods=["GET", "POST"]
+)
+@admin_required
+def admin_bulk_add_lesson_blocks(lesson_id):
+
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    # ---------------------------------------------------------
+    # CHECK LESSON
+    # ---------------------------------------------------------
+
+    cursor.execute("""
+        SELECT
+            lessons.id,
+            lessons.title
+        FROM lessons
+        JOIN topics
+            ON lessons.topic_id = topics.id
+        JOIN courses
+            ON topics.course_id = courses.id
+        WHERE lessons.id = ?
+        AND courses.name = ?
+    """, (
+        lesson_id,
+        "Python"
+    ))
+
+    lesson = cursor.fetchone()
+
+    if lesson is None:
+        connection.close()
+        return "Lesson not found", 404
+
+    cursor.execute("""
+        SELECT MAX(block_order)
+        FROM lesson_blocks
+        WHERE lesson_id = ?
+    """, (lesson_id,))
+
+    result = cursor.fetchone()
+
+    last_block_order = result[0] or 0
+
+    connection.close()
+
+    if request.method == "POST":
+
+        bulk_content = request.form.get(
+            "bulk_content",
+            ""
+        ).strip()
+
+        sections = bulk_content.split("\n[")
+
+        parsed_blocks = []
+
+        for index, section in enumerate(sections):
+
+            section = section.strip()
+
+            if index > 0:
+                section = "[" + section
+
+            if not section.startswith("["):
+                continue
+
+            closing_bracket = section.find("]")
+
+            if closing_bracket == -1:
+                continue
+
+            block_type = section[1:closing_bracket].strip()
+
+            content = section[
+                closing_bracket + 1:
+            ].strip()
+
+            parsed_blocks.append(
+                (
+                    block_type,
+                    content
+                )
+            )
+
+        if not parsed_blocks:
+
+            return render_template(
+                "admin_bulk_add_lesson_blocks.html",
+                lesson_id=lesson_id,
+                error="No valid blocks found.",
+                bulk_content=bulk_content
+            )
+
+        valid_block_types = (
+            "text",
+            "explanation",
+            "code",
+            "output",
+            "warning",
+            "example",
+            "exercise",
+            "table"
+        )
+
+        for block_type, content in parsed_blocks:
+
+            if block_type not in valid_block_types:
+
+                return render_template(
+                    "admin_bulk_add_lesson_blocks.html",
+                    lesson_id=lesson_id,
+                    error=(
+                        f"Invalid block type: "
+                        f"{block_type}"
+                    ),
+                    bulk_content=bulk_content
+                )
+
+            if not content:
+
+                return render_template(
+                    "admin_bulk_add_lesson_blocks.html",
+                    lesson_id=lesson_id,
+                    error=(
+                        f"Block '{block_type}' "
+                        f"cannot be empty."
+                    ),
+                    bulk_content=bulk_content
+                )
+
+        connection = get_db_connection()
+        cursor = connection.cursor()
+
+        for index, (block_type, content) in enumerate(
+            parsed_blocks,
+            start=1
+        ):
+
+            block_order = last_block_order + index
+
+            cursor.execute("""
+                INSERT INTO lesson_blocks (
+                    lesson_id,
+                    block_type,
+                    content,
+                    block_order
+                )
+                VALUES (?, ?, ?, ?)
+            """, (
+                lesson_id,
+                block_type,
+                content,
+                block_order
+            ))
+
+        connection.commit()
+        connection.close()
+
+        return redirect(
+            f"/admin/lessons/{lesson_id}/blocks"
+        )
+
+    return render_template(
+        "admin_bulk_add_lesson_blocks.html",
+        lesson_id=lesson_id
+    )
+
+@app.route(
     "/admin/lessons/<int:lesson_id>/blocks/add",
     methods=["GET", "POST"]
 )

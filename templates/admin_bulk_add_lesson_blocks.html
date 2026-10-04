@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}
+Bulk Add Lesson Blocks
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <h1 class="mb-2">
+        Bulk Add Blocks
+    </h1>
+
+    <p class="text-muted mb-4">
+        Add multiple content blocks to this lesson at once.
+    </p>
+
+    {% if error %}
+
+        <div class="alert alert-danger">
+            {{ error }}
+        </div>
+
+    {% endif %}
+
+    <form method="POST">
+
+        <div class="mb-3">
+
+            <label
+                for="bulk_content"
+                class="form-label"
+            >
+                Lesson Content
+            </label>
+
+            <textarea
+                class="form-control"
+                id="bulk_content"
+                name="bulk_content"
+                rows="20"
+                placeholder="[text]
+Introduction to the lesson...
+
+[code]
+print('Hello')
+
+[output]
+Hello"
+            >{{ bulk_content | default('') }}</textarea>
+
+        </div>
+
+        <button
+            type="submit"
+            class="btn btn-primary"
+        >
+            Add Blocks
+        </button>
+
+        <a
+            href="/admin/lessons/{{ lesson_id }}/blocks"
+            class="btn btn-secondary ms-2"
+        >
+            Cancel
+        </a>
+
+    </form>
+
+</div>
+
+{% endblock %}
