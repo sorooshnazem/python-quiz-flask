@@ -7,6 +7,7 @@ from functools import wraps
 from dotenv import load_dotenv
 from init_db import init_db
 from seed_data import seed_data
+import re
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -1835,16 +1836,17 @@ def admin_bulk_add_lesson_blocks(lesson_id):
             ""
         ).strip()
 
-        sections = bulk_content.split("\n[")
+        sections = re.split(
+            r"\n(?=\[(?:text|explanation|code|output|warning|example|exercise|table)\]\s*$)",
+            bulk_content,
+            flags=re.MULTILINE
+        )
 
         parsed_blocks = []
 
         for index, section in enumerate(sections):
 
             section = section.strip()
-
-            if index > 0:
-                section = "[" + section
 
             if not section.startswith("["):
                 continue
