@@ -20,3 +20,6 @@ database.db
 # Operating system files
 .DS_Store
 Thumbs.db
+
+export_new_lessons.py
+lessons_7_21.sql
