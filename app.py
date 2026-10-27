@@ -21,6 +21,26 @@ if not app.secret_key:
         "SECRET_KEY environment variable is not configured"
     )
 
+def format_lesson_paragraphs(content):
+    """
+    Divide il testo in paragrafi e rimuove
+    gli spazi verticali eccessivi.
+    """
+    if not content:
+        return []
+
+    content = content.replace("\r\n", "\n").replace("\r", "\n")
+
+    paragraphs = re.split(r"\n\s*\n+", content.strip())
+
+    return [
+        re.sub(r"\s*\n\s*", " ", paragraph).strip()
+        for paragraph in paragraphs
+        if paragraph.strip()
+    ]
+
+app.jinja_env.globals["format_lesson_paragraphs"] = format_lesson_paragraphs
+
 def admin_required(function):
 
     @wraps(function)

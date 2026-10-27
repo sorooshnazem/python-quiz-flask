@@ -32,8 +32,9 @@ body {
 --------------------------------------------------------- */
 
 .lesson-text {
-    white-space: pre-line;
-    line-height: 1.8;
+    white-space: normal;
+    line-height: 1.65;
+    font-size: 1.05rem;
 }
 
 
