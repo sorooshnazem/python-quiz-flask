@@ -85,11 +85,17 @@
 
                 {% if block[0] == "text" %}
 
-                    <div class="lesson-text fs-5 mb-4">
-                        {% for paragraph in format_lesson_paragraphs(block[1]) %}
-                            <p class="mb-3">{{ paragraph }}</p>
-                        {% endfor %}
-                    </div>
+                    {% if lesson[0] >= 9 %}
+                        <h3 class="fw-bold mt-4 mb-3">
+                            {{ block[1] }}
+                        </h3>
+                    {% else %}
+                        <div class="lesson-text fs-5 mb-4">
+                            {% for paragraph in format_lesson_paragraphs(block[1]) %}
+                                <p class="mb-3">{{ paragraph }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
 
 
                 <!-- =================================================
